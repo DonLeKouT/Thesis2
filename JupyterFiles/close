@@ -1,0 +1,1239 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "7e0419ff",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "import os\n",
+    "import gc\n",
+    "from statsmodels.tsa.stattools import acf\n",
+    "from statsmodels.graphics.tsaplots import plot_acf\n",
+    "import holoviews as hv\n",
+    "import bokeh\n",
+    "import datashader as ds\n",
+    "from holoviews.operation.datashader import rasterize, dynspread\n",
+    "hv.extension('bokeh')\n",
+    "from bokeh.plotting import show\n",
+    "pd.options.plotting.backend = 'holoviews'\n",
+    "from sklearn.tree import DecisionTreeClassifier\n",
+    "from sklearn import tree\n",
+    "from sklearn.linear_model import LinearRegression\n",
+    "import hvplot.pandas\n",
+    "from holoviews import opts\n",
+    "from holoviews.operation.datashader import datashade, shade, dynspread, spread, rasterize\n",
+    "from holoviews.operation import decimate\n",
+    "from functions import *\n",
+    "from scipy.stats import zscore\n",
+    "from scipy.ndimage.filters import uniform_filter1d\n",
+    "from bokeh.models import DatetimeTickFormatter\n",
+    "from numba import jit"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "9af3e134",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "kraken = pd.read_parquet('/home/donlekout/Desktop/Thesis/Data/Kraken/kraken_spot_btcusd.parquet', columns=['amount', 'price'])\n",
+    "bitstamp = pd.read_parquet('/home/donlekout/Desktop/Thesis/Data/Bitstamp/bitstamp_btcusd.parquet', columns=['amount', 'price'])\n",
+    "coinbase = pd.read_parquet('/home/donlekout/Desktop/Thesis/Data/Coinbase/coinbase_btcusd.parquet', columns=['amount', 'price'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "7818e3da",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "binance1 = pd.read_parquet('/home/donlekout/Desktop/Thesis/Data/Binance/binance_spot_btcusdt_2017_2018_2019.parquet', columns=['amount', 'price'])\n",
+    "binance2 = pd.read_parquet('/home/donlekout/Desktop/Thesis/Data/Binance/binance_spot_btcusdt_2020.parquet', columns=['amount', 'price'])\n",
+    "binance3 = pd.read_parquet('/home/donlekout/Desktop/Thesis/Data/Binance/binance_spot_btcusdt_2021.parquet', columns=['amount', 'price'])\n",
+    "binance = pd.concat((binance1, binance2, binance3), axis = 0)\n",
+    "del binance1, binance2, binance3"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "20ae69a7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "huobi1 = pd.read_parquet('/home/donlekout/Desktop/Thesis/Data/Huobi/huobi_spot_btcusdt_2018_2019_2020.parquet', columns=['amount', 'price'])\n",
+    "huobi2 = pd.read_parquet('/home/donlekout/Desktop/Thesis/Data/Huobi/huobi_spot_btcusdt_2021.parquet', columns=['amount', 'price'])\n",
+    "huobi = pd.concat((huobi1, huobi2), axis = 0)\n",
+    "del huobi1, huobi2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "ce96527e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "kra2 = kraken['amount'] * kraken['price']\n",
+    "coi2 = coinbase['amount'] * coinbase['price']\n",
+    "bit2 = bitstamp['amount'] * bitstamp['price']\n",
+    "bin2 = binance['amount'] * binance['price']\n",
+    "huo2 = huobi['amount'] * huobi['price']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "5633d0bf",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "del binance, huobi, kraken, coinbase, bitstamp"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "5e952694",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "@jit(nopython = True, nogil = True)\n",
+    "def retail(dataset):\n",
+    "    n = len(dataset)\n",
+    "    out = np.zeros(n)\n",
+    "\n",
+    "    for i in np.arange(n):\n",
+    "        if (dataset[i] > 100) & (((dataset[i] / 1.22) % 10) < 0.05):\n",
+    "            out[i] = dataset[i]\n",
+    "    \n",
+    "    return out"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "8095731e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "@jit()\n",
+    "def retail2(dataset):\n",
+    "\n",
+    "    nparray = retail(dataset.to_numpy())\n",
+    "\n",
+    "    last = pd.Series(nparray)\n",
+    "    last.index = dataset.index\n",
+    "\n",
+    "    return last.resample('d').count()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "ba61b997",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "kra_ret_1 = retail2(kra2)\n",
+    "coi_ret_1 = retail2(coi2)\n",
+    "bit_ret_1 = retail2(bit2)\n",
+    "bin_ret_1 = retail2(bin2)\n",
+    "huo_ret_1 = retail2(huo2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "08dbadbc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1 = pd.concat((kra_ret_1, coi_ret_1, bit_ret_1), axis = 1).sum(axis = 1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "3c929141",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1.plot(logy = True, ylim = (0.1, 1e+8), label = 'Estimated number of retail trades for BTCUSD')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "dc742134",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1 = pd.concat((bin_ret_1, huo_ret_1), axis = 1).sum(axis = 1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "d8dae1d1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot(logy = True, ylim = (0.1, 1e+8), label = 'Estimated number of retail trades for BTCUSDT')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "8ec8f1f5",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( ylim = (0.1, 1e+8), label = 'Estimated number of retail trades for BTCUSDT')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "aa117baf",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( abel = 'Estimated number of retail trades for BTCUSDT')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "afb374b2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( λabel = 'Estimated number of retail trades for BTCUSDT')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "4d2559da",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( label = 'Estimated number of retail trades for BTCUSDT')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "9a38e26a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1.plot(label = 'Estimated number of retail trades for BTCUSD')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "a980d2b6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( label = 'Estimated number of retail trades for BTCUSDT', kind = 'area')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "4ea7492c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( label = 'Estimated number of retail trades for BTCUSDT', kind = 'area') * usd_ret_1.plot(label = 'Estimated number of retail trades for BTCUSD', kind = 'area')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "e8cdf689",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( label = 'Estimated number of retail trades for BTCUSDT', kind = 'area')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "ee529179",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( label = 'Estimated number of retail trades for BTCUSDT', kind = 'bar')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "8b48d3f8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( label = 'Estimated number of retail trades for BTCUSDT', kind = 'area')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "a333d92a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( label = 'Estimated number of retail trades for BTCUSDT', dtashader = True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "c30be44b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( label = 'Estimated number of retail trades for BTCUSDT', dtashade = True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "5af7e723",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( label = 'Estimated number of retail trades for BTCUSDT', datashade = True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "c9e44991",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.plot( label = 'Estimated number of retail trades for BTCUSDT', kind = 'area')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "f2d8cc99",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1.plot(label = 'Estimated number of retail trades for BTCUSD', kind = 'area')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "5b7f03ab",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1['2021-01-01':].plot(label = 'Estimated number of retail trades for BTCUSD', kind = 'area')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "ab238051",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1['2021-01-01':].plot( label = 'Estimated number of retail trades for BTCUSDT', kind = 'area')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "id": "e761a8ad",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1['2020-06-06':].plot(label = 'Estimated number of retail trades for BTCUSD', kind = 'area')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "id": "73ef0af9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1['2020-06-06':].plot( label = 'Estimated number of retail trades for BTCUSDT', kind = 'area')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "333dbdf2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1['2020-06-06':].plot( label = 'Estimated number of retail trades for BTCUSDT', kind = 'area') * usd_ret_1['2020-06-06':].plot(label = 'Estimated number of retail trades for BTCUSD', kind = 'area')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "id": "a597cb20",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "(usdt_ret_1['2020-06-06':] / usd_ret_1['2020-06-06':]).plot()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "116f69a0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "(usdt_ret_1 / usd_ret_1).plot()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "a21b8848",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "(usdt_ret_1 / usd_ret_1[usdt_ret_1.index]).plot()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "7c33fd7c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "(usdt_ret_1 / usd_ret_1[usdt_ret_1.index]).plot(label = 'Ratio of number of USDT to USD trades')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "id": "6479eb57",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1['2020-06-06':].plot( label = 'Estimated number of retail trades for BTCUSDT', kind = 'area', legend = 'top_left') * usd_ret_1['2020-06-06':].plot(label = 'Estimated number of retail trades for BTCUSD', kind = 'area')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "id": "0d4da3c6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1['2020-06-06':].plot( label = 'Estimated number of retail trades for BTCUSDT', kind = 'area', legend = 'top_left') * usd_ret_1['2020-06-06':].plot(label = 'Estimated number of retail trades for BTCUSD', kind = 'area', legend = 'top_left')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "id": "f96e3439",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1['2020-06-06':].plot(width = 800, height = 400, label = 'Estimated number of retail trades for BTCUSDT', kind = 'area', legend = 'top_left') * usd_ret_1['2020-06-06':].plot(label = 'Estimated number of retail trades for BTCUSD', kind = 'area', legend = 'top_left')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "id": "3de46e8f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "(usdt_ret_1 / usd_ret_1[usdt_ret_1.index]).plot(width = 800, height = 400, label = 'Ratio of number of USDT to USD trades')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "id": "c37b22aa",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "price = pd.read_parquet('/home/donlekout/Desktop/Thesis/Data/Bitstamp/bitstamp_btcusd.parquet', columns=['price'])\n",
+    "#price = price.resample('d').sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "id": "4a66ea1f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "price.resample('d').mean()[usdt_ret_1.index].plot()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 44,
+   "id": "e995bf91",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "price"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "id": "a878c368",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka = price.resample('d').mean()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "id": "26e7b218",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka[usdt_ret_1.index].plot()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 47,
+   "id": "f81902eb",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka[usdt_ret_1.index]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 48,
+   "id": "326d1856",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 49,
+   "id": "e228836f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka[usdt_ret_1.index]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 50,
+   "id": "39e1ea0d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "id": "963a75da",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka.loc[usdt_ret_1.index]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "id": "9bf6c2a8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka.loc[usdt_ret_1.index].plot()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "id": "f3357c14",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka.loc[usdt_ret_1.index].plot(logy = True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 54,
+   "id": "50b163e6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka.loc[usdt_ret_1.index].plot(logy = True, kind = 'area', alpha = 0.4, label = 'BTCUSD price, daily timeframe')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 55,
+   "id": "87f67af1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka.loc[usdt_ret_1.index].plot(logy = True,label = 'BTCUSD price, daily timeframe')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 56,
+   "id": "71d8e85c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka.loc[usdt_ret_1.index].plot(logy = True,label = 'BTCUSD price, daily timeframe', width = 1000, height = 400)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 57,
+   "id": "1a5b9e2a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka.loc[usdt_ret_1.index].plot(logy = True,label = 'BTCUSD price, daily timeframe', width = 1400, height = 400)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 58,
+   "id": "2832fa06",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1['2018-01-01':].plot(width = 800, height = 400, label = 'Estimated number of retail trades for BTCUSDT', kind = 'area', legend = 'top_left') * usd_ret_1['2018-01-01':].plot(label = 'Estimated number of retail trades for BTCUSD', kind = 'area', legend = 'top_left')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 59,
+   "id": "618a6a5b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "(usdt_ret_1 / usd_ret_1[usdt_ret_1.index]).plot(width = 800, height = 400, label = 'Ratio: USDT to USD retail trades')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 60,
+   "id": "1e932daa",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1.hist()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "id": "4afd9ac7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1.hist(bins = 30)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 62,
+   "id": "2031affa",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1.hist(bins = 50)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 63,
+   "id": "13747bf3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1.hist(bins = 100)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 64,
+   "id": "5ffb5280",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1[usd_ret_1 < 200000].hist(bins = 100)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 65,
+   "id": "49e920ce",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1[usd_ret_1 < 200000].hist(bins = 100)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 66,
+   "id": "6ccf5347",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1.describe()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 67,
+   "id": "3edf471c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1.describe()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 68,
+   "id": "8b4b189f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "table = pd.concat((usd_ret_1.describe(), usdt_ret_1.describe()), axis = 1)\n",
+    "table.columns = ['BTCUSD', 'BTCUSDT']\n",
+    "table"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 69,
+   "id": "783e719f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "import os\n",
+    "import gc\n",
+    "from statsmodels.tsa.stattools import acf\n",
+    "from statsmodels.graphics.tsaplots import plot_acf\n",
+    "import holoviews as hv\n",
+    "import bokeh\n",
+    "import datashader as ds\n",
+    "from holoviews.operation.datashader import rasterize, dynspread\n",
+    "hv.extension('bokeh')\n",
+    "from bokeh.plotting import show\n",
+    "pd.options.plotting.backend = 'holoviews'\n",
+    "from sklearn.tree import DecisionTreeClassifier\n",
+    "from sklearn import tree\n",
+    "from sklearn.linear_model import LinearRegression\n",
+    "import hvplot.pandas\n",
+    "from holoviews import opts\n",
+    "from holoviews.operation.datashader import datashade, shade, dynspread, spread, rasterize\n",
+    "from holoviews.operation import decimate\n",
+    "from functions import *\n",
+    "from scipy.stats import zscore\n",
+    "from scipy.ndimage.filters import uniform_filter1d\n",
+    "from bokeh.models import DatetimeTickFormatter\n",
+    "from numba import jit\n",
+    "import dataframe_image as dfi"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 70,
+   "id": "1fac3036",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "table = pd.concat((usd_ret_1.describe(), usdt_ret_1.describe()), axis = 1)\n",
+    "table.columns = ['BTCUSD', 'BTCUSDT']\n",
+    "dfi.export(table, '/home/donlekout/Desktop/Thesis/Thesis/TexFiles/Images/dataframe.png')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 71,
+   "id": "c6fafd5c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1[usd_ret_1 < 200000].hist(bins = 100, label = 'BTCUSDT retail trades histogram', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 72,
+   "id": "5379caf8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1[usd_ret_1 < 200000].hist(bins = 100, label = 'BTCUSD retail trades histogram', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 73,
+   "id": "dd6f755c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1[usd_ret_1 < 200000].hist(bins = 100, title = 'BTCUSDT retail trades histogram', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 74,
+   "id": "493bb705",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1[usd_ret_1 < 200000].hist(bins = 100, title = 'BTCUSD retail trades histogram', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 75,
+   "id": "7266ce23",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1[usd_ret_1 < 200000].hist(bins = 100, title = 'BTCUSD retail trades histogram < 200,000$', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 76,
+   "id": "950fdae9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1[usd_ret_1 < 200000].hist(bins = 100, title = 'BTCUSDT retail trades histogram < 200,000$', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 77,
+   "id": "c76186e7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1[usd_ret_1 < 200000].hist(bins = 100, title = 'BTCUSDT retail trades histogram < $200,000', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 78,
+   "id": "c3cc2cc5",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1[usd_ret_1 < 200000].hist(bins = 100, title = 'BTCUSDT retail trades histogram < 200,000$', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 79,
+   "id": "91389f19",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 80,
+   "id": "a2029899",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1['2018-01-01':][usd_ret_1 < 200000].hist(bins = 100, title = 'BTCUSD retail trades histogram < 200,000$', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 81,
+   "id": "e061438f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1[usd_ret_1 < 500000].hist(bins = 100, title = 'BTCUSDT retail trades histogram < 200,000$', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 82,
+   "id": "d78a2dc8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1['2018-01-01':][usd_ret_1 < 500000].hist(bins = 100, title = 'BTCUSD retail trades histogram < 200,000$', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 83,
+   "id": "99cccca0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1[usd_ret_1 < 500000].hist(bins = 100, title = 'BTCUSDT retail trades histogram < 500,000$', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 84,
+   "id": "c1a7cbb8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1['2018-01-01':][usd_ret_1 < 500000].hist(bins = 100, title = 'BTCUSD retail trades histogram < 500,000$', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 85,
+   "id": "93d0105a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "table = pd.concat((usd_ret_1['2018-01-01':].describe(), usdt_ret_1.describe()), axis = 1)\n",
+    "table.columns = ['BTCUSD', 'BTCUSDT']\n",
+    "dfi.export(table, '/home/donlekout/Desktop/Thesis/Thesis/TexFiles/Images/dataframe.png')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 86,
+   "id": "2f4770b7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "table = pd.concat((usd_ret_1['2018-01-01':][usd_ret_1 < 500000].describe(), usdt_ret_1[usdt_ret_1 < 500000].describe()), axis = 1)\n",
+    "table.columns = ['BTCUSD', 'BTCUSDT']\n",
+    "dfi.export(table, '/home/donlekout/Desktop/Thesis/Thesis/TexFiles/Images/dataframe.png')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 87,
+   "id": "aa47e830",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 88,
+   "id": "05af0626",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "@jit(nopython = True, nogil = True)\n",
+    "def retail(dataset):\n",
+    "    n = len(dataset)\n",
+    "    out = np.zeros(n)\n",
+    "\n",
+    "    for i in np.arange(n):\n",
+    "        if (dataset[i] > 100) & (((dataset[i] / 1.0022) % 10) < 0.05):\n",
+    "            out[i] = dataset[i]\n",
+    "    \n",
+    "    return out"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 89,
+   "id": "ff531933",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "@jit()\n",
+    "def retail2(dataset):\n",
+    "\n",
+    "    nparray = retail(dataset.to_numpy())\n",
+    "\n",
+    "    last = pd.Series(nparray)\n",
+    "    last.index = dataset.index\n",
+    "\n",
+    "    return last.resample('d').count()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 90,
+   "id": "6cc180e9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "kra_ret_1 = retail2(kra2)\n",
+    "coi_ret_1 = retail2(coi2)\n",
+    "bit_ret_1 = retail2(bit2)\n",
+    "bin_ret_1 = retail2(bin2)\n",
+    "huo_ret_1 = retail2(huo2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 91,
+   "id": "01db6223",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1 = pd.concat((kra_ret_1, coi_ret_1, bit_ret_1), axis = 1).sum(axis = 1)\n",
+    "usdt_ret_1 = pd.concat((bin_ret_1, huo_ret_1), axis = 1).sum(axis = 1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 92,
+   "id": "746cb3ce",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 93,
+   "id": "3da66df4",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "462137 * 1.0022"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 94,
+   "id": "53e7d9de",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "462137 / 1.0022"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 95,
+   "id": "920bcb70",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "(462137 / 1.0022) % 10"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 96,
+   "id": "dc280c3e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "kra_ret_1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 97,
+   "id": "613213e9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "41066 / 1.0022"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 98,
+   "id": "90307632",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "(41066 / 1.0022)%10"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 99,
+   "id": "fd4a520c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "retail(kra2.to_numpy())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 100,
+   "id": "6df50355",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "a = retail(kra2.to_numpy())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 101,
+   "id": "961a13e4",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "a"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 102,
+   "id": "2f767d78",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "a[a != 0]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 103,
+   "id": "8476d3c5",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "22088.50417819 / 1.0022"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 104,
+   "id": "a2570145",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1 = pd.concat((kra_ret_1, coi_ret_1, bit_ret_1), axis = 1).sum(axis = 1)\n",
+    "usdt_ret_1 = pd.concat((bin_ret_1, huo_ret_1), axis = 1).sum(axis = 1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 105,
+   "id": "67e568d9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1[usd_ret_1 < 500000].hist(bins = 100, title = 'BTCUSDT retail trades histogram < 500,000$', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 106,
+   "id": "ab015c99",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "table = pd.concat((usd_ret_1['2018-01-01':][usd_ret_1 < 500000].describe(), usdt_ret_1[usdt_ret_1 < 500000].describe()), axis = 1)\n",
+    "table.columns = ['BTCUSD', 'BTCUSDT']\n",
+    "dfi.export(table, '/home/donlekout/Desktop/Thesis/Thesis/TexFiles/Images/dataframe.png')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 107,
+   "id": "4d90956e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usd_ret_1['2018-01-01':][usd_ret_1 < 500000].hist(bins = 100, title = 'BTCUSD retail trades histogram < 500,000$', xlabel = 'Value of Trade')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 108,
+   "id": "055ce79b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "usdt_ret_1['2018-01-01':].plot(width = 800, height = 400, label = 'Estimated number of retail trades for BTCUSDT', kind = 'area', legend = 'top_left') * usd_ret_1['2018-01-01':].plot(label = 'Estimated number of retail trades for BTCUSD', kind = 'area', legend = 'top_left')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 109,
+   "id": "9d407d30",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "(usdt_ret_1 / usd_ret_1[usdt_ret_1.index]).plot(width = 800, height = 400, label = 'Ratio: USDT to USD retail trades')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 110,
+   "id": "4d141687",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "taka = price.resample('d').mean()\n",
+    "taka.loc[usdt_ret_1.index].plot(logy = True,label = 'BTCUSD price, daily timeframe', width = 1400, height = 400)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 111,
+   "id": "ec398d31",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "table = pd.concat((usd_ret_1['2018-01-01':][usd_ret_1 < 500000].describe(), usdt_ret_1[usdt_ret_1 < 500000].describe()), axis = 1)\n",
+    "table.columns = ['BTCUSD', 'BTCUSDT']\n",
+    "dfi.export(table, '/home/donlekout/Desktop/Thesis/Thesis/TexFiles/Images/dataframe.png')"
+   ]
+  }
+ ],
+ "metadata": {},
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

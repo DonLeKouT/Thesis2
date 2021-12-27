@@ -1,0 +1,17 @@
+[0] Config.pm:304> INFO - This is Biber 2.14 (beta)
+[0] Config.pm:307> INFO - Logfile is 'Thesis.blg'
+[47] biber:322> INFO - === Δευ Δεκ 20, 2021, 21:39:00
+[55] Biber.pm:415> INFO - Reading 'Thesis.bcf'
+[105] Biber.pm:943> INFO - Found 1 citekeys in bib section 0
+[115] Biber.pm:4256> INFO - Processing section 0
+[115] Utils.pm:75> INFO - Globbing data source '/home/donlekout/Desktop/Thesis/Thesis/TexFiles/Chapters/References/bibtex.bib'
+[115] Utils.pm:91> INFO - Globbed data source '/home/donlekout/Desktop/Thesis/Thesis/TexFiles/Chapters/References/bibtex.bib' to /home/donlekout/Desktop/Thesis/Thesis/TexFiles/Chapters/References/bibtex.bib
+[121] Biber.pm:4455> INFO - Looking for bibtex format file '/home/donlekout/Desktop/Thesis/Thesis/TexFiles/Chapters/References/bibtex.bib' for section 0
+[121] bibtex.pm:1653> INFO - LaTeX decoding ...
+[123] bibtex.pm:1471> INFO - Found BibTeX data source '/home/donlekout/Desktop/Thesis/Thesis/TexFiles/Chapters/References/bibtex.bib'
+[140] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[140] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[140] Biber.pm:4084> INFO - Sorting list 'apa/global//global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[140] Biber.pm:4090> INFO - No sort tailoring available for locale 'en-US'
+[143] bbl.pm:652> INFO - Writing 'Thesis.bbl' with encoding 'UTF-8'
+[143] bbl.pm:755> INFO - Output to Thesis.bbl

@@ -1,0 +1,179 @@
+
+\section{Introduction}
+
+In this chapter, we will explore the BTCUSD(T) market across 5 major exchanges by following a visual approach on aggregated data. The sampling that is used at this stage is across time, volume and number of trades in a fixed window. Key insights that will be extracted, will serve as the infrastructure of a dynamic way of sampling. 
+
+
+\section{Volume}
+
+Volume is an important aspect of all financial data. Exploring volume across exchanges is a significant task that will provide our analysis with the insights as to how someone should proceed in using trade-to-trade and aggregated volume in several windows, in order to create meaningful signals.
+
+The trade data for BTCUSD begin as early as 2011, with few exchanges offering the opportunity to trade this asset. The first exchange was MtGox. It was launched in 2010 and closed in April 2014 due to fraud, as more than 850,000 BTC were missing \cite{wiki_mt}. As time passed and BTC gained even more traction, the trade volume upscaled significantly and more exchanges started to appear, such as Bitstamp, Kraken and Coinbase. We will consider 2016 - 2017, as the years that BTC became known enough, to attract the first retail and institutional players.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm, height = 4cm]{historical_volume.png}
+    \caption{Quarterly volume across spot exchanges.}
+    \label{fig:hist_vol}
+\end{figure}
+
+
+As we can see in \ref{fig:hist_vol}, the overall trading volume begun to rise in early 2017, as more people were attracted to the impressive BTC bull run, up until that point. At this point, we could distinct the BTCUSD from BTCUSDT volume following the assumption that a retail trader is forced to use fiat currency in order to buy bitcoin in some centralized exchange, thus the bitcoin volume on USD, could serve as an indicator of retail activity.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm, height = 4cm]{volume2.png}
+    \caption{BTCUSD and BTCUSDT spot trading volume (in bitcoin).}
+    \label{fig:vol2}
+\end{figure}
+
+The first thing to notice in \ref{fig:vol2}, is that since 2014, there hasn't been any significant change in volume traded (bitcoin denominated), and that USDT is preferred over USD. The latter is to be expected, since USDT is 'tethered' to the USD (stable coin offering safety from volatility), and tokens are easily transferable across exchanges in contrast to fiat. On the other hand, the \ref{fig:vol3} shows a steep increase in dollars traded that corresponds to the increase in bitcoin price. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm, height = 4cm]{usdusdt.png}
+    \caption{BTCUSD and BTCUSDT spot trading volume (in USD(T)).}
+    \label{fig:vol3}
+\end{figure}
+
+In the next four graphs \ref{fig:mean}, we can see the mean trading volume in bitcoin and dollar for BTCUSD and BTCUSDT. As we expect, in the upper two graphs, the mean trading volume decreases as bitcoin price increases. In contrast, the bottom right graph, show an increase that corresponds to the bitcoin price. The bottom left graph though, shows a little increase in mean volume per trade in dollars. 
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=6cm, height = 3.3cm]{mean1}
+    \includegraphics[width=6cm, height = 3.3cm]{mean2}
+    \\[\smallskipamount]
+    \includegraphics[width=6cm, height = 3.3cm]{mean3}
+    \includegraphics[width=6cm, height = 3.3cm]{mean4}
+    \caption{Mean volume per trade.}
+    \label{fig:mean}
+\end{figure}
+
+
+Furthermore, an evolving market such as the crypto market, attracts retail, institutional and high frequency traders. In order to classify a trade as retail or not, two important assumptions must be met: 
+\begin{itemize}
+\item Retail traders are trading in integer dollar volumes, and most likely in multiples of 10, and
+\item Institutional investors will more likely buy and sell in OTC (Over The Counter) markets.
+\end{itemize} 
+
+In order to extract the possible retail trades, we chose a mean transaction cost \( c = 0.022\% \) per trade, and extracted it from all trades. If a trade was divisible by 10, it was classified as a retail trade. Nevertheless, the fee structure is different across exchanges and even different across traders in the same exchange (volume per month dependent). Therefore, we chose to include an error \(e = \$0.15 \) as an acceptable distance from the closer mutliple of 10. The trades chosen, should be trades made manually by some trader and not an algorithm (that tends to trade in many decimals). Furthermore, these trades could be made by a professional of a small magnitude and not a retail trader. For briefness purposes, we will refer to these trades, as retail trades, and the traders that initiated them, as retail traders.
+ 
+In the figure \ref{fig:ret1}, we can see that the estimated number of retail trades on BTCUSDT, is from 4 to 12 times bigger than the one on BTCUSD. Since a retail trader that wishes to trade for the first time, is forced to use fiat currency, we could assume, that the BTCUSDT trades, were executed from retail traders that were active in previous market cycles as well (2017 bull run and before). 
+
+On the top right graph, we can see the ratio of BTCUSDT to BTCUSD trades. We observe that the top is reached during May 2021, when the first large correction of the latest bull markets occured. 
+
+
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=6cm, height = 3.3cm]{ret_trades_1.png}
+    \includegraphics[width=6cm, height = 3.3cm]{ratio_ret_trades.png}
+     \\[\smallskipamount]
+    \includegraphics[width=12.2cm, height = 3.3cm]{price_retail.png}
+	\caption{Retail trades and BTC price.}
+    \label{fig:ret1}
+\end{figure}
+
+The increasing ratio indicates that BTCUSDT trades are relatively more precise in following the bull run (experienced retail traders) while the ratio starts declining, close to market top, indicating the timing when retail activity starts to gain traction in BTCUSD market, where is more likely for a 'first time retail trader' to trade.
+
+On the next histograms, the difference in retail activity between BTCUSD and BTCUSDT becomes even more apparent. In the BTCUSD case, the graph is skewed to the left, with few days distributed to the extremes \( > 600,000 \). The BTCUSDT markets though, as indicated from standard deviation which is 3 times greater than the one in BTCUSD, show that the retail activity is distributed more evenly.  A further search on this, should reveal the events that triggered some of the bellow extreme values.  
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=6cm, height = 3.3cm]{btcusd_hist.png}
+    \includegraphics[width=6cm, height = 3.3cm]{btcusdt_hist.png}
+    \caption{Histogram of BTCUSD and BTCUSDT no of retail trades per day}
+    \label{fig:hist}
+\end{figure}
+
+From the summary statistics, we can see that the mean, 25\%, 50\% and 75\% are three to four times greater in BTCUSDT markets, indicative of the preference of retail traders to USDT.
+
+
+\begin{center}
+\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}| }
+ \hline
+ \multicolumn{3}{|c|}{Summary Statistics} \\
+ \hline
+  & BTCUSD  & BTCUSDT \\
+ \hline
+ count   & 1.372000e+03	   &1.206000e+03 \\
+ mean &   1.837303e+05	  & 6.846854e+05   \\
+ std &1.632955e+05 & 4.669768e+05\\
+ min    &1.058000e+03 & 4.790000e+02\\
+ 25\% &   8.008925e+04  & 3.093760e+05\\
+ 50\% & 1.186430e+05  & 5.595545e+05   \\
+ 75\% & 2.206602e+05  & 9.985932e+05\\
+ \hline
+\end{tabular}
+\end{center}
+
+
+The differences between BTCUSD and BTCUSDT markets, extend to the bitcoin price as well. In the next figure \ref{fig:premium}, we can see that there are arbitrage opportunities between BTCUSD and BTCUSDT markets but not among the markets themselves. These opportunities seem to be available in periods of sudden price movements, and could be accredited to the difference in volume between the two markets. Throughout the 2021 bull market, there was a consistent discrepancy in the fiat premium index.
+
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 2.7cm]{pre1.png} \\
+    \includegraphics[width=12cm, height = 2.7cm]{pre2.png} \\
+    \includegraphics[width=12cm, height = 2.7cm]{pre3.png} \\
+    \includegraphics[width=12cm, height = 2.7cm]{pre4.png} \\
+    \includegraphics[width=12cm, height = 2.7cm]{pre5.png} \\
+	\caption{Fiat premium.}
+    \label{fig:premium}
+\end{figure}
+
+
+Such discepancies could be a valuable source of imbalances, that could lead to a more precise sampling. Next, we will explore volume a bit deeper. We will decompose (eigendecomposition) the covariance matrix of volume, of the BTCUSD and BTCUSDT markets. The computation will take place in a rolling fashion under a fixed time interval in order to capture the convergence of volume, between the exchanges in different phases of the market.
+
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 3cm]{cov1.png} \\
+    \includegraphics[width=12cm, height = 3cm]{cov2.png} \\
+	\caption{PCA analysis - 1st principal component and BTCUSD price.}
+    \label{fig:covmatrix}
+\end{figure}
+
+In the above figure \ref{fig:covmatrix}, we can see that based on the covariance of the volumes across exchanges, the 1st principal component seems to explain almost all variance most of the time. This finding, enhances the idea that information is quickly transfered and volumes generally converge. The same must be tested for metrics other than covariance. An appropriate such metric, is the first principal component computed from the eigendecomposition of the Kendall correlation matrix. Since the volumes are not normally distributed (figure \ref{fig:kdevol}) , we cannot use neither Pearson or Spearman correlation .
+
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=4cm, height = 2.5cm]{kde1.png}
+    \includegraphics[width=4cm, height = 2.5cm]{kde2.png}
+    \includegraphics[width=4cm, height = 2.5cm]{kde3.png}
+    \includegraphics[width=4cm, height = 2.5cm]{kde4.png}
+    \includegraphics[width=4cm, height = 2.5cm]{kde5.png}
+	\caption{KDE plot of volumes aggregated on 4h timeframe, for all exchanges.}
+    \label{fig:kdevol}
+\end{figure}
+
+
+Kendall's Tau (\(\tau\)), is a non parametric test that is used to measure the correlation between two variables. There are three different variations of this test, but mostly the Tau-b (\(\tau_b\)) is used. The formula is:
+\[
+\tau_b = \frac{2(n_c - n_d)}{\sqrt{n(n-1) - G_x}\sqrt{n(n-1) - G_y}} 
+\]
+
+where:
+\begin{itemize}
+\item \(n_c\) is the number of concordant values
+\item \(n_d\) is the number of discordant values
+\item \(G_{x,y} = \sum{t_i(t_i-1)}\) where \(t_i\) is the number of tied values in the \(i\) group of the \(\{x,y\}\) variable
+\end{itemize}
+
+For the next figures, we classified the volume \(V\) into positive volume and negative volume. The computations involved the sign of the returns \(b_t = sign\{p_t - p_{t-1}\}\), where \(p_t\) is the price at time \(t\) (this computation took place on tick data therefore \(t\) is the time measured in number of ticks), multiplied with volume at time \(t-1\) : \(b_t \cdot V_{t-1}\). This computation created an additional two volumes. The rationale behind this, is that negative volume will be responsible for negative returns and positive volume for positive returns. 
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 2.8cm]{kendal4.png} \\
+    \includegraphics[width=12cm, height = 2.8cm]{kendal3.png} \\ 
+    \includegraphics[width=12cm, height = 2.8cm]{kendal1.png} \\
+    \includegraphics[width=12cm, height = 2.8cm]{kendal2.png} \\
+	\caption{Eigendecomposition on kendal correlation matrix for positive and negative volume for \textbf{BTCUSDT} markets.}
+    \label{fig:pcakendall}
+\end{figure}
+
+In figure \ref{fig:pcakendall} we can see the convergence of positive and negative volumes among BTCUSDT market. The 1st principal component has consistenly high explained variance ratio \( > 0.7 \) which shows that volume between Binance and Huobi, are following the same direction most of the time.
+
+

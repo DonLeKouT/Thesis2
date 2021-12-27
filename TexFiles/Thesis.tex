@@ -1,0 +1,81 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsfonts, amsmath, amssymb}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{csquotes} 
+\usepackage[T1]{fontenc}
+\usepackage[american]{babel}
+\usepackage[backend=biber, backref = true, style=apa]{biblatex}
+\usepackage{float}
+\usepackage{fancyhdr}
+\graphicspath{{Images/}}
+\usepackage[a4paper, width=150mm,top=25mm,bottom=25mm]{geometry}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+%\fancyhf{}
+%\fancyhead[RE LO]{\chaptermark~\thechapter}
+%\fancyhead[LO]{\leftmark}
+%\fancyfoot[C]{\thepage}
+%[backend=biber,style=authoryear]
+
+\DeclareLanguageMapping{american}{american-apa}
+\addbibresource{/home/donlekout/Desktop/Thesis/Thesis/TexFiles/Chapters/References/bibtex.bib}
+\usepackage{hyperref}
+
+
+
+\vfill
+\author{Tilemachos Kosmetsas \& Christos Koutkos}
+\date{December 2021}
+
+
+\begin{document}
+
+\input{Chapters/Titlepage.tex}
+
+
+\chapter*{Abstract}
+\input{Chapters/Misc/Abstract.tex}
+
+
+\chapter*{Dedication}
+To our beautiful families
+
+\chapter*{Declaration}
+I will have a winning strategy 
+
+\chapter*{Acknowledgements}
+Thank you all
+
+\tableofcontents
+
+\listoffigures
+
+\listoftables
+
+
+\chapter{Introduction}
+\input{Chapters/Introduction/Introduction.tex}
+
+\chapter{Exploration}
+\input{Chapters/Chapter1/Chapter1.tex}
+
+\chapter{Sampling}
+\input{Chapters/Chapter2/Chapter2.tex}
+
+\appendix
+\chapter*{Appendix}
+\input{Chapters/Appendix/Appendix.tex}
+
+\printbibliography
+
+\end{document}
+
+
+
+
+
+

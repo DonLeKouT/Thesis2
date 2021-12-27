@@ -1,0 +1,2 @@
+\contentsline {section}{\numberline {1}Write a 1-to-2-page report to the Portfolio Manager explaining both the big-picture, and key technical details of the results. \\ Be sure to compare how the PCA portfolio compares to the asset-class portfolios!}{1}{section.1}%
+\contentsline {section}{\numberline {2}Write a 1-page report that specifically explains how your group divided the work with details.}{7}{section.2}%
