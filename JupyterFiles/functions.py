@@ -615,7 +615,7 @@ def imbalance_exp(dataset, alpha, beta, state, threshold):
 
 
 @jit(nopython = True, nogil = True)
-def imbalance_ticks(dataset, alpha, beta, gamma, initial):
+def imbalance_ticks2(dataset, alpha, beta, gamma, initial):
     n = dataset.shape[0]
     out = np.zeros(n)
     ewma1 = 5
