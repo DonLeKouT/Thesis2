@@ -83,7 +83,7 @@
       <file>Thesis.bcf</file>
     </requires>
     <requires type="editable">
-      <file>/home/donlekout/Desktop/Thesis/Thesis/TexFiles/Chapters/References/bibtex.bib</file>
+      <file>/home/donlekout/Documents/Thesis/TexFiles/Chapters/References/bibtex.bib</file>
     </requires>
   </external>
 </requests>

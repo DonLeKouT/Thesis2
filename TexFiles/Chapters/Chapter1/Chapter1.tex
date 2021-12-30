@@ -8,7 +8,7 @@ In this chapter, we will explore the BTCUSD(T) market across 5 major exchanges b
 
 Volume is an important aspect of all financial data. Exploring volume across exchanges is a significant task that will provide our analysis with the insights as to how someone should proceed in using trade-to-trade and aggregated volume in several windows, in order to create meaningful signals.
 
-The trade data for BTCUSD begin as early as 2011, with few exchanges offering the opportunity to trade this asset. The first exchange was MtGox. It was launched in 2010 and closed in April 2014 due to fraud, as more than 850,000 BTC were missing \cite{wiki_mt}. As time passed and BTC gained even more traction, the trade volume upscaled significantly and more exchanges started to appear, such as Bitstamp, Kraken and Coinbase. We will consider 2016 - 2017, as the years that BTC became known enough, to attract the first retail and institutional players.
+The trade data for BTCUSD begin as early as 2011, with few exchanges offering the opportunity to trade this asset. The first exchange was MtGox. It was launched in 2010 and closed in April 2014 due to fraud, as more than 850,000 BTC were missing \cite{wiki_mt}. As time passed by and BTC gained even more traction, the trade volume upscaled significantly and more exchanges, such as Bitstamp, Kraken and Coinbase, appeared. We will consider 2016 - 2017, as the years that BTC became known enough, to attract the first retail and institutional players.
 
 \begin{figure}[h]
     \centering
@@ -18,7 +18,7 @@ The trade data for BTCUSD begin as early as 2011, with few exchanges offering th
 \end{figure}
 
 
-As we can see in \ref{fig:hist_vol}, the overall trading volume begun to rise in early 2017, as more people were attracted to the impressive BTC bull run, up until that point. At this point, we could distinct the BTCUSD from BTCUSDT volume following the assumption that a retail trader is forced to use fiat currency in order to buy bitcoin in some centralized exchange, thus the bitcoin volume on USD, could serve as an indicator of retail activity.
+As we can see in \ref{fig:hist_vol}, the overall trading volume begun to rise in early 2017, as more people were attracted to the impressive BTC bull run, up until that point. At this point, we could distinct the BTCUSD from BTCUSDT volume following the assumption that a retail trader is forced to use fiat currency in order to buy bitcoin for the first time, in some centralized exchange, thus the bitcoin volume on USD, could serve as an indicator of retail activity.
 
 
 \begin{figure}[h]
@@ -28,7 +28,7 @@ As we can see in \ref{fig:hist_vol}, the overall trading volume begun to rise in
     \label{fig:vol2}
 \end{figure}
 
-The first thing to notice in \ref{fig:vol2}, is that since 2014, there hasn't been any significant change in volume traded (bitcoin denominated), and that USDT is preferred over USD. The latter is to be expected, since USDT is 'tethered' to the USD (stable coin offering safety from volatility), and tokens are easily transferable across exchanges in contrast to fiat. On the other hand, the \ref{fig:vol3} shows a steep increase in dollars traded that corresponds to the increase in bitcoin price. 
+The first thing to notice in \ref{fig:vol2}, is that since the 2017 BTC bullrun, the BTCUSD volume (in bitcoin) is slightly elevated. Furthermore, since the introduction of USDT, the exchanges that offered BTCUSDT trading, easily surpassed those that offered only BTCUSD. The latter is to be expected, since USDT is 'tethered' to the USD (stable coin offering safety from volatility), while being at the same time easily transferable across exchanges in contrast to fiat. On the other hand, the \ref{fig:vol3} shows a steep increase in dollars traded that can be attributed to the increase in bitcoin price. 
 
 \begin{figure}[h]
     \centering
@@ -37,7 +37,7 @@ The first thing to notice in \ref{fig:vol2}, is that since 2014, there hasn't be
     \label{fig:vol3}
 \end{figure}
 
-In the next four graphs \ref{fig:mean}, we can see the mean trading volume in bitcoin and dollar for BTCUSD and BTCUSDT. As we expect, in the upper two graphs, the mean trading volume decreases as bitcoin price increases. In contrast, the bottom right graph, show an increase that corresponds to the bitcoin price. The bottom left graph though, shows a little increase in mean volume per trade in dollars. 
+In the next four graphs \ref{fig:mean}, we can see the mean trading volume in bitcoin and dollars for BTCUSD and BTCUSDT. As we expect, in the upper two graphs, the mean trading volume decreases as bitcoin price increases. In contrast to the above, the bottom graphs, show an increase in mean trading volume, although, this increase, is different for the two markets: the BTCUSD market shows the 'anticipated' behavior that can be explained by the BTC price and the increased interest to this new asset, and the BTCUSDT market, exhibits a smaller increase in mean trading volume (dollars) even though the volume traded in USDT is higher than the volume traded in USD. The latter indicates the existence of many small buy/sell orders in the USDT markets.
 
 \begin{figure}[H]
 	\centering
@@ -57,7 +57,7 @@ Furthermore, an evolving market such as the crypto market, attracts retail, inst
 \item Institutional investors will more likely buy and sell in OTC (Over The Counter) markets.
 \end{itemize} 
 
-In order to extract the possible retail trades, we chose a mean transaction cost \( c = 0.022\% \) per trade, and extracted it from all trades. If a trade was divisible by 10, it was classified as a retail trade. Nevertheless, the fee structure is different across exchanges and even different across traders in the same exchange (volume per month dependent). Therefore, we chose to include an error \(e = \$0.15 \) as an acceptable distance from the closer mutliple of 10. The trades chosen, should be trades made manually by some trader and not an algorithm (that tends to trade in many decimals). Furthermore, these trades could be made by a professional of a small magnitude and not a retail trader. For briefness purposes, we will refer to these trades, as retail trades, and the traders that initiated them, as retail traders.
+In order to extract the possible retail trades, we chose a mean transaction cost \( c = 0.022\% \) per trade, and extracted it from all trades. If a trade was divisible by 10, it was classified as a retail trade. Nevertheless, the fee structure is different across exchanges and even different across traders in the same exchange (volume per month dependent). Therefore, we chose to include an error \(e = \$0.15 \) as an acceptable distance from the closer mutliple of 10. The trades chosen, should be trades made manually by some trader and not an algorithm (that tends to trade in many decimals). Furthermore, these trades could be made by a professional of a small magnitude and not a retail trader. For briefness purposes, we will refer to these trades, as retail trades, and the traders that initiated them, as retail traders. The above assumptions are flawed in the sense that someone can buy/sell in bitcoin denominated  values (0.5 btc or 1 btc), therefore, this metric can capture only a small percentage of retail trades. Nevertheless, based on the data that the authors possess, there is no other way to classify a trade as 'retail trade'.
  
 In the figure \ref{fig:ret1}, we can see that the estimated number of retail trades on BTCUSDT, is from 4 to 12 times bigger than the one on BTCUSD. Since a retail trader that wishes to trade for the first time, is forced to use fiat currency, we could assume, that the BTCUSDT trades, were executed from retail traders that were active in previous market cycles as well (2017 bull run and before). 
 
@@ -175,5 +175,10 @@ For the next figures, we classified the volume \(V\) into positive volume and ne
 \end{figure}
 
 In figure \ref{fig:pcakendall} we can see the convergence of positive and negative volumes among BTCUSDT market. The 1st principal component has consistenly high explained variance ratio \( > 0.7 \) which shows that volume between Binance and Huobi, are following the same direction most of the time.
+
+Upon close inspection, it seems that sudden price moves can be associated with higher convergence of volume between the BTCUSDT exchanges. The same seems to be the case, for all exchanges as well (figure \ref{fig:covmatrix}). That leads us to the idea that we could sample when there is convergence in a feature of choice (volume, positive-negative volume, buy/sell volume, number of trades per interval), assuming that in order for such an event to occur, there must be some new information. 
+
+
+
 
 
