@@ -178,7 +178,35 @@ In figure \ref{fig:pcakendall} we can see the convergence of positive and negati
 
 Upon close inspection, it seems that sudden price moves can be associated with higher convergence of volume between the BTCUSDT exchanges. The same seems to be the case, for all exchanges as well (figure \ref{fig:covmatrix}). That leads us to the idea that we could sample when there is convergence in a feature of choice (volume, positive-negative volume, buy/sell volume, number of trades per interval), assuming that in order for such an event to occur, there must be some new information. 
 
+Next, we visualize the number of trades that take place in each exchange. In the figure \ref{fig:nooftrades}, we can see the number of trades aggregated in daily timeframe with the upper chard being in logarithmic scale. We observe that the USDT market is processing many more trades than the USD market. By calculating and comparing the mean number of trades per exchange across 2020 and 2021, we find that the mean trades per day of Binance is 5.5 time the mean of Coinbase, 32 times the mean of Kraken and approximately 37 times the mean of Bitstamp. We also observe that the number of trades (aggregated) is presented in waves, with visible spikes around significant price action. Again, these spikes, converge across all exchanges.  
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 2.8cm]{No_of_trades_all2.png} \\
+    \includegraphics[width=12cm, height = 2.8cm]{No_of_trades_all1.png} \\ 
+	\caption{The number of trades aggregated daily, for each exchange. Note that the upper chart is logarithmic.}
+    \label{fig:nooftrades}
+\end{figure}
+
+In the next figure \ref{fig:nooftrades2}, we are separating the buy from the sell trades. First thing to notice is that our data is corrupted, since for approximately 15 days, all trades are classified as buy-side trades. Due to this shortcoming, in any attempt to use the side of the trade, we will have to exclude this portion of the dataset. Furthermore, the Binance, as expected, processes the largest amount of orders, either buy or sell, but in several spikes, Huobi seems to catch or even suprass Binance. Last but not least, it is interesting that the amount of trades in Coinbase's BTCUSD pair, are steadily increasing, catching up those of the BTCUSDT market.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 2.8cm]{nosell1.png} \\
+    \includegraphics[width=12cm, height = 2.8cm]{nosell2.png} \\ 
+	\caption{The number of buy and sell trades aggregated daily, for each exchange. Both charts are logarithmic.}
+    \label{fig:nooftrades2}
+\end{figure}
 
 
+The next upper graph \ref{fig:cum}, is produced by taking the cumulative sums of buy side and sell side orders across all exchanges, and subtracting one from the other: 
+\[ cumsum\{Buy\_side\_volume - Sell\_side\_volume\} \]
+Just before the major bullrun of 2020-2021, the sell volume surpassed by far the buy volume, indicative of the uncertainty of that period (Covid19). The second graph is produced by taking the cumsum of the difference of buy and sell volume, but for each exchange individually. An interesting finding is that coinbase and bitstamp are processing more buy side volume than sell side, and more buy volume than any other exchange. The exact opposite is true for Binance, where sell volume is the highest. That alligns with our prior findings, in that BTCUSD market is the entrance of the 'first time' bitcoin buyer, who is attracted during the bull run. Concerning the high sell volume in Binance, 
 
-
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 2.8cm]{buy-sell.png} \\
+    \includegraphics[width=12cm, height = 2.8cm]{cumdif.png} \\ 
+	\caption{The number of buy and sell trades aggregated daily, for each exchange. Both charts are logarithmic.}
+    \label{fig:cum}
+\end{figure}

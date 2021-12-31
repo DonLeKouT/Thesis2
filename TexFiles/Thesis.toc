@@ -11,6 +11,6 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.2}Volume}{10}{section.2.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {3}Sampling}{17}{chapter.3}%
+\contentsline {chapter}{\numberline {3}Sampling}{19}{chapter.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}Introduction}{17}{section.3.1}%
+\contentsline {section}{\numberline {3.1}Introduction}{19}{section.3.1}%
