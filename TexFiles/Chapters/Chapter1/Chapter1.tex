@@ -201,7 +201,10 @@ In the next figure \ref{fig:nooftrades2}, we are separating the buy from the sel
 
 The next upper graph \ref{fig:cum}, is produced by taking the cumulative sums of buy side and sell side orders across all exchanges, and subtracting one from the other: 
 \[ cumsum\{Buy\_side\_volume - Sell\_side\_volume\} \]
-Just before the major bullrun of 2020-2021, the sell volume surpassed by far the buy volume, indicative of the uncertainty of that period (Covid19). The second graph is produced by taking the cumsum of the difference of buy and sell volume, but for each exchange individually. An interesting finding is that coinbase and bitstamp are processing more buy side volume than sell side, and more buy volume than any other exchange. The exact opposite is true for Binance, where sell volume is the highest. That alligns with our prior findings, in that BTCUSD market is the entrance of the 'first time' bitcoin buyer, who is attracted during the bull run. Concerning the high sell volume in Binance, 
+Just before the major bullrun of 2020-2021, the sell volume surpassed by far the buy volume, indicative of the uncertainty of that period (Covid19). Around October 2020, the cumulative sell volume peaked, as shown in the minimum of the graph. From then and on, the buy volume was steadily increasing, which coincides with the price action, at the beginning of the 2020-2021 bull run.  
+
+The second graph is produced by taking the cumsum of the difference of buy and sell volume, but for each exchange individually. An interesting finding is that coinbase and bitstamp are processing more buy side volume than sell side, and more buy volume than any other exchange. The exact opposite is true for Binance, where sell volume is the highest. That alligns with our prior findings, in that BTCUSD market is the entrance of the 'first time' bitcoin buyer, who is attracted during the bull run. 
+
 
 \begin{figure}[H]
 	\centering
@@ -210,3 +213,6 @@ Just before the major bullrun of 2020-2021, the sell volume surpassed by far the
 	\caption{The number of buy and sell trades aggregated daily, for each exchange. Both charts are logarithmic.}
     \label{fig:cum}
 \end{figure}
+
+
+This disrepancy makes clear that even though each exchange has its own pool of trades, the market dynamics are such, that we need to concern the exchanges not only individually, but as a unified pool of liquidity as well, where one exchange is used mostly from buyers and another on, mostly from sellers. The latter is possible, due to the easy transfering of tokens between exchanges. Especially USDT, XRP, XLM and DOGE amongst others, seem to have enough liquidity, and very low transaction finality time, to be prime candidates for transfering value fast and cheap across exchanges (in contrast to fiat). 
