@@ -1,4 +1,22 @@
 
 \section{Introduction}
 
-In this chapter, we will sample 
+In this chapter, we will sample on BTCUSD and BTCUSDT dataset across all features and more specifically volume, side of the trade, speed of the market, and convergence of exchanges in various features. For simplicity reasons, when sampling takes place on all exchanges, the dataset will be aggregated to the 'second' or 'minute' interval (the 'minute' interval sampling will be used mostly for plotting purposes). In other occasions, the sampling will take place directly on raw tick data, nevertheless, in order to create the dataset for all exchanges, some sort of aggregation must be used, most probably in respect to time.
+
+\subsection{Volume}
+
+In this section, we will use volume along with different features of choice such as, positive-negative returns and buy-sell side. We will begin with buy-sell volume, while we illustrate how the sampling could end up in signal creation.
+
+\subsubsection{Buy and Sell Volume}
+
+In order to create the dataset, we classify the volume into buy and sell volume, depending on the side of the trade. This classification is taking place directly on tick data. Then, the dataset is aggregated on the 'second' time interval, and two columns are created: one for the buy volume and one for the sell volume. This procedure is used for all exchanges and especially in this occasion, (using the bue-sell side feature along with volume) all exchanges should be used (see \ref{fig:cum}). 
+
+The latter results to a 10 column dataset where 5 columns created for buy volume and 5 columns for sell volume (one column for each exchange). Lastly, the 5 columns of each side, are summed row-wise in order to create one column for buy and one column for sell volume. The last columns represent the volume that took place on all exchanges classified as buy and sell and aggregated to the 'second' timeframe.
+
+Furthermore, the last two columns are substracted, resulting into one column for the difference between the two volumes. The latter, should be positive in upward price moves, and negative in downward price moves. Intuitively, the volume difference between two consecutive buy and sell points, will not be enough to create price action, but the buildup of an imbalance where the difference becomes too large, should be useful. 
+
+In order to model this difference, we will use the Hawkes process. The latter makes sense, as this process can simulate the arrival of events, and in our occasion the arrival of volume \cite{Hawkes}. 
+
+A Hawkes process is a self-exciting process, where an event, increases the probability of another event.
+
+
