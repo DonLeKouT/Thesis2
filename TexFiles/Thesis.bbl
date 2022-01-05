@@ -19,56 +19,6 @@
 
 \refsection{0}
   \datalist[entry]{apa/global//global/global}
-    \entry{Hawkes}{article}{}
-      \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=d6255051eb47b9afa290057a72ea68b9}{%
-           family={Dassios},
-           familyi={D\bibinitperiod},
-           given={Angelos},
-           giveni={A\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=ecb0e5b576e7ccb649e4f7e475da2bee}{%
-           family={Zhao},
-           familyi={Z\bibinitperiod},
-           given={Hongbiao},
-           giveni={H\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{publisher}{2}{%
-        {Institute of Mathematical Statistics}%
-        {Bernoulli Society}%
-      }
-      \strng{namehash}{7a722878460e24abc6e16bf7b896ceed}
-      \strng{fullhash}{7a722878460e24abc6e16bf7b896ceed}
-      \strng{bibnamehash}{7a722878460e24abc6e16bf7b896ceed}
-      \strng{authorbibnamehash}{7a722878460e24abc6e16bf7b896ceed}
-      \strng{authornamehash}{7a722878460e24abc6e16bf7b896ceed}
-      \strng{authorfullhash}{7a722878460e24abc6e16bf7b896ceed}
-      \field{sortinit}{D}
-      \field{sortinithash}{c438b3d5d027251ba63f5ed538d98af5}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Electronic Communications in Probability}
-      \field{number}{none}
-      \field{title}{{Exact simulation of Hawkes process with exponentially decaying intensity}}
-      \field{volume}{18}
-      \field{year}{2013}
-      \field{pages}{1\bibrangedash 13}
-      \range{pages}{13}
-      \verb{doi}
-      \verb 10.1214/ECP.v18-2717
-      \endverb
-      \verb{urlraw}
-      \verb https://doi.org/10.1214/ECP.v18-2717
-      \endverb
-      \verb{url}
-      \verb https://doi.org/10.1214/ECP.v18-2717
-      \endverb
-      \keyw{Contagion risk,exact simulation,Hawkes process,Hawkes process with exponentially decaying intensity,Monte Carlo simulation,self-exciting point process,Stochastic intensity model}
-    \endentry
     \entry{wiki_mt}{online}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=9c677286866aad38f8e9b660f5411814}{%

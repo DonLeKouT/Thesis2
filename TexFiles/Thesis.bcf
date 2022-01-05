@@ -2559,7 +2559,6 @@
   </bcf:bibdata>
   <bcf:section number="0">
     <bcf:citekey order="1">wiki_mt</bcf:citekey>
-    <bcf:citekey order="2">Hawkes</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="apa">

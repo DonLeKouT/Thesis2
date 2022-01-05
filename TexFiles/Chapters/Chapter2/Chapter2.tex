@@ -9,14 +9,49 @@ In this section, we will use volume along with different features of choice such
 
 \subsubsection{Buy and Sell Volume}
 
-In order to create the dataset, we classify the volume into buy and sell volume, depending on the side of the trade. This classification is taking place directly on tick data. Then, the dataset is aggregated on the 'second' time interval, and two columns are created: one for the buy volume and one for the sell volume. This procedure is used for all exchanges and especially in this occasion, (using the bue-sell side feature along with volume) all exchanges should be used (see \ref{fig:cum}). 
+The dataset is created by classifying the volume into buy and sell volume, depending on the side of the trade. This classification is taking place directly on tick data. Then, the dataset is aggregated (summation) on the 'second' time interval, where two columns are created: one for the buy volume and one for the sell volume. This procedure is used for all exchanges and as we have shown, all exchanges should be used (see \ref{fig:cum}). 
 
-The latter results to a 10 column dataset where 5 columns created for buy volume and 5 columns for sell volume (one column for each exchange). Lastly, the 5 columns of each side, are summed row-wise in order to create one column for buy and one column for sell volume. The last columns represent the volume that took place on all exchanges classified as buy and sell and aggregated to the 'second' timeframe.
+The latter results to a 10 column dataset where 5 columns are created for the buy volume and 5 columns for the sell volume (one column for each exchange). Lastly, the 5 columns of each side, are summed row-wise in order to create one column for buy and one column for sell volume. The last columns represent the volume that took place on all exchanges after being classified as buy and sell.
 
-Furthermore, the last two columns are substracted, resulting into one column for the difference between the two volumes. The latter, should be positive in upward price moves, and negative in downward price moves. Intuitively, the volume difference between two consecutive buy and sell points, will not be enough to create price action, but the buildup of an imbalance where the difference becomes too large, should be useful. 
+In order to model the two volumes, we will use a Hawkes process. To provide the reader with a brief explanation of the Hawkes process, we shall begin with a Poisson process, which models the number of occurences at certain time intervals. The key takeaways from Poisson processes are that the expected rate of these occurrences \( \lambda \) is stable (homogeneity) and that the expected rate of occurrences at a future time interval is independent of past occurrences. 
 
-In order to model this difference, we will use the Hawkes process. The latter makes sense, as this process can simulate the arrival of events, and in our occasion the arrival of volume \cite{Hawkes}. 
+In order to study more complex phenomena, a Non-homogeneous Poisson process could be used, where the future events are still independent of past phenomena, but \( \lambda \) is now a function of time. This particular idea fits somewhat with market behavior, in that the expected rate of returns (or as we will later show), the expected rate of volume traded, does seemingly not behave independently of the time interval, but fluctuates locally. There are certain periods of time where the volume that is expected to be traded is higher (moments of behavior co-ordination). For the function \( \lambda(t) \) to be called a deterministic function (and also non-homogeneous Poisson process) there are certain axioms that need to be held. This function then is called an “Intensity function”.
 
-A Hawkes process is a self-exciting process, where an event, increases the probability of another event.
+Lastly, in addition to the above, if the intensity function is not stable, but is affected by the history of the timeseries up to time \(t\), the process is called Hawkes process. A Hawkes process is a self-exciting process, which its past events affect the current value of the process. There also exist other similar approaches to Hawkes, such as convolutional neural networks which are mostly used for image classification that use a weighted average of previous values. The problem with this approach, contrary to Hawkes is that this approach would enforce static dependencies while Hawkes intensity function uses the \(N(t)\) counting process as a positive reinforcement that decays exponentially in such a way that past events that are close to time \(t\), affect the value of the function much more than, say older events that are further away from \(t\). 
+
+In a volume specific example the formula would be:
+\[ \lambda(t|H_t) = \lambda_0(0|H_0) + \sum_{i=1}^{N(t)}\text{Vol}(i) \cdot e^{-\delta(t-T_i)} \]
+where \(\lambda_0(0|H_0) \) is the initial intensity and \( \delta \) would be a positive dampening coefficient that implies the rate at which the function decays.
+
+Using a Hawkes process with \( \delta = 0.2 \) and \( \lambda_0 = 0 \), we modeled the buy and sell volume, and upon the new dataset, we sampled using two parallel moving averages, one slow (larger scope) and one faster (smaller window). The sampling took place, when the fast MA exceeded the slow MA by a threshold. This way, we can have an overview of the buy and sell volume surges. First thing to notice, is that most of the points sampled from the two volumes are different (see \ref{fig:hawkes1}). There is an oversampling in sudden price action and no sampling at all when price goes sideways. Furthermore, the buy volume, is found mostly in local maxima and the sell volume in local minima, which is to be expected.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm, height = 4cm]{hawkes1.png}
+    \caption{An example of buy (green circle) and sell (red circle) volume. The size of the markers, correspond to the amount volume traded.}
+    \label{fig:hawkes1}
+\end{figure}
+
+
+At this point, we decided to disregard the mandatory positive counting process and instead use a process that could take negative values. That process would be the difference between positive and negative volumes and it would no longer be a Hawkes process. The first results of our experimentation showed that when the buying side was far greater than the negative selling side, the process would be excited by a positive value and vice versa. Thus, this process could also take negative values, but even if a large negative selling volume appeared, it would take a couple of steps for the function to actually get affected enough and fall below zero (lagging). We consider it natural for sellers to affect buyers and vice versa, and we decided to follow this idea because simple volume self-excitation was not enough.
+
+After using the following custom intensity function: 
+\[ \lambda(t|H_t) = \lambda_0(0|H_0) + \sum_{i=1}^{N(t)}(\text{Vol}_{\text{Buy}}(i) - \text{Vol}_{\text{Sell}}(i)) \cdot e^{-\delta(t-T_i)} \]
+
+After modelling the above difference, we used two moving averages, one slow (larger scope) and one faster (smaller window), as above. We then decided to sample based on two different factors, thus creating 4 states. The rationale behind the 4 states, is that we could sample not only when the volume difference spikes, but also when the spike ends, signaling the end of the price action.
+The two factors are:
+\begin{itemize}
+\item Faster MA over slow MA and vice versa (setting a threshold as above)
+\item Sign of the difference 
+\end{itemize}
+
+And the four states:
+\begin{enumerate}
+\item Fast moving average of our process would exceed the slow-moving average, indicating there is incoming positive volume (immediate past) at greater rate than the slow-moving average (larger past time window) and the Buyers volume exceeds the Sellers volume.
+\item Fast moving average of our process would exceed the slow-moving average, indicating there is incoming positive volume (immediate past) at greater rate than the slow-moving average (larger past time window) and the sellers volume exceed the Buyers volume. We believe this to be a significant indicator for sampling (specifically a shorting the market indicator) because it shows that although there has been a large Buyers rate recently, Sellers appear to significantly take over the reins. Additionaly, it could also indicate the end of an upward price move.
+\item Fast moving average of our process would fall below the slow-moving average, indicating there is incoming negative volume (immediate past) at greater rate than the slow-moving average (larger past time window) and the Sellers volume exceeds the Buyers volume.
+\item Fast moving average of our process would fall below the slow-moving average, indicating there is incoming negative volume (immediate past) at greater rate than the slow-moving average (larger past time window) but the Buyers volume would exceed the Sellers volume. We also believe this to be a significant indicator for sampling (specifically a longing the market indicator) because it shows that although there has been a large Sellers rate recently, Buyers appear to significantly take over the reins. Additionaly, it could also indicate the end of an downward price move.
+\end{enumerate}
+
 
 
