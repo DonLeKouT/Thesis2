@@ -53,5 +53,28 @@ And the four states:
 \item Fast moving average of our process would fall below the slow-moving average, indicating there is incoming negative volume (immediate past) at greater rate than the slow-moving average (larger past time window) but the Buyers volume would exceed the Sellers volume. We also believe this to be a significant indicator for sampling (specifically a longing the market indicator) because it shows that although there has been a large Sellers rate recently, Buyers appear to significantly take over the reins. Additionaly, it could also indicate the end of an downward price move.
 \end{enumerate}
 
+In the figure \ref{fig:hawkes2}, we can see an example of the states. Upon carefull inspection of the local minima, we observe increased sell volume (upper graph, red triangle), with the fast MA above the slow one (lower graph, green circle). In many of these occasions, a reversion occurs right away. The latter is a state 2 example. Using the same notion, we distinguish a state 4 example, by observing that at local maxima, the increased buy volume (upper graph, green triangle) is accompanied with the fast MA being under the slow one (lower graph, red cross). In many occasions, a reversion in the price occurs. The reader should keep in mind, that the sampling took place in the 'second' timeframe, while the price, is plotted from the 'minute' timeframe, using the mean price during that minute. Therefore, the real volatility cannot be grasped by this graph, and some points seem to be wander of the price plot.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 4cm]{hawkes2.png} \\
+    \includegraphics[width=12cm, height = 4cm]{hawkes3.png} \\
+	\caption{An illustration of the four states. The first graph corresponds to the first factor and the second graph to the second factor.}
+    \label{fig:hawkes2}
+\end{figure}
+
+
+The reader should keep in mind, that the sampling took place in the 'second' timeframe, while the price in the figure above, is plotted from the 'minute' timeframe, using the mean price during that minute. Therefore, the real volatility cannot be grasped by this graph, and some points seem to be wander of the price plot. In order to bypass that shortcoming, a zoom-in figure, with price displayed in seconds must be presented. In figure \ref{fig:hawkeszoom}, 
+
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 4cm]{hawkeszoom1.png} \\
+    \includegraphics[width=12cm, height = 4cm]{hawkeszoom2.png} \\
+	\caption{A zoomed in graph, where the price is displayed in 'seconds' timeframe.}
+    \label{fig:hawkeszoom}
+\end{figure}
+
+
 
 
