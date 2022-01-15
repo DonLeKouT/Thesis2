@@ -35,7 +35,7 @@ Using a Hawkes process with \( \delta = 0.2 \) and \( \lambda_0 = 0 \), we model
 
 At this point, we decided to disregard the mandatory positive counting process and instead use a process that could take negative values. That process would be the difference between positive and negative volumes and it would no longer be a Hawkes process. The first results of our experimentation showed that when the buying side was far greater than the negative selling side, the process would be excited by a positive value and vice versa. Thus, this process could also take negative values, but even if a large negative selling volume appeared, it would take a couple of steps for the function to actually get affected enough and fall below zero (lagging). We consider it natural for sellers to affect buyers and vice versa, and we decided to follow this idea because simple volume self-excitation was not enough.
 
-After using the following custom intensity function: 
+We used the following custom intensity function: 
 \[ \lambda(t|H_t) = \lambda_0(0|H_0) + \sum_{i=1}^{N(t)}(\text{Vol}_{\text{Buy}}(i) - \text{Vol}_{\text{Sell}}(i)) \cdot e^{-\delta(t-T_i)} \]
 
 After modelling the above difference, we used two moving averages, one slow (larger scope) and one faster (smaller window), as above. We then decided to sample based on two different factors, thus creating 4 states. The rationale behind the 4 states, is that we could sample not only when the volume difference spikes, but also when the spike ends, signaling the end of the price action.
@@ -53,27 +53,37 @@ And the four states:
 \item Fast moving average of our process would fall below the slow-moving average, indicating there is incoming negative volume (immediate past) at greater rate than the slow-moving average (larger past time window) but the Buyers volume would exceed the Sellers volume. We also believe this to be a significant indicator for sampling (specifically a longing the market indicator) because it shows that although there has been a large Sellers rate recently, Buyers appear to significantly take over the reins. Additionaly, it could also indicate the end of an downward price move.
 \end{enumerate}
 
-In the figure \ref{fig:hawkes2}, we can see an example of the states. Upon carefull inspection of the local minima, we observe increased sell volume (upper graph, red triangle), with the fast MA above the slow one (lower graph, green circle). In many of these occasions, a reversion occurs right away. The latter is a state 2 example. Using the same notion, we distinguish a state 4 example, by observing that at local maxima, the increased buy volume (upper graph, green triangle) is accompanied with the fast MA being under the slow one (lower graph, red cross). In many occasions, a reversion in the price occurs. The reader should keep in mind, that the sampling took place in the 'second' timeframe, while the price, is plotted from the 'minute' timeframe, using the mean price during that minute. Therefore, the real volatility cannot be grasped by this graph, and some points seem to be wander of the price plot.
+In the figure \ref{fig:hawkes2}, we can see an example of the states. Upon carefull inspection of the local minima, we observe increased sell volume (upper graph, red triangle), with the fast MA above the slow one (lower graph, green circle). In many of these occasions, a reversion occurs right away. The latter is a state 2 example. Using the same notion, we distinguish a state 4 example, by observing that at local maxima, the increased buy volume (upper graph, green triangle) is accompanied with the fast MA being under the slow one (lower graph, red cross). In many occasions, a reversion in the price occurs. 
 
 \begin{figure}[H]
 	\centering
     \includegraphics[width=12cm, height = 4cm]{hawkes2.png} \\
     \includegraphics[width=12cm, height = 4cm]{hawkes3.png} \\
-	\caption{An illustration of the four states. The first graph corresponds to the first factor and the second graph to the second factor.}
+	\caption{An illustration of the four states. The first graph corresponds to the first factor and the second graph to the second factor. In the first graph, the green arrows indicate buy volume and the red ones, sell volume. In the second graph, the green circle corresponds to Fast MA > Slow MA, while the red cross, corresponds to the exact opposite.}
     \label{fig:hawkes2}
 \end{figure}
 
 
-The reader should keep in mind, that the sampling took place in the 'second' timeframe, while the price in the figure above, is plotted from the 'minute' timeframe, using the mean price during that minute. Therefore, the real volatility cannot be grasped by this graph, and some points seem to be wander of the price plot. In order to bypass that shortcoming, a zoom-in figure, with price displayed in seconds must be presented. In figure \ref{fig:hawkeszoom}, 
+The reader should keep in mind, that the sampling took place in the 'second' timeframe, while the price in the figure above, is plotted from the 'minute' timeframe, using the mean price during that minute. Therefore, the real volatility cannot be grasped by this graph, and some points seem to wander off the price plot. In order to bypass that shortcoming, and furthermore, to illustrate visually how modelling - sampling - parameters look like, a zoom-in figure, with price displayed in seconds will be presented.
 
 
 \begin{figure}[H]
 	\centering
     \includegraphics[width=12cm, height = 4cm]{hawkeszoom1.png} \\
     \includegraphics[width=12cm, height = 4cm]{hawkeszoom2.png} \\
-	\caption{A zoomed in graph, where the price is displayed in 'seconds' timeframe.}
+    \includegraphics[width=12cm, height = 4cm]{hawkeszoom3.png} \\
+    \includegraphics[width=12cm, height = 4cm]{hawkeszoom4.png}
+	\caption{Several plots of a 'Hawkes process' on the difference of buy and sell volume along with an example of sampling using moving averages on the above process (in 'seconds' timeframe).}
     \label{fig:hawkeszoom}
 \end{figure}
+
+
+In 2020-10-16 from 04:00 to 04:40, there was a rapid correction in BTCUSD(T) pair. The figure \ref{fig:hawkeszoom}, presents the 'Hawkes process' on the buy and sell volume difference, and then a sampling effort on this process. At first, the third plot (Cumulative sum of Buy and Sell difference), shows that the sell volume is greater than the buy volume. There are also some points where the sell pressure is higher and periods where buy and sell volume are approximately the same. We observe that in the points where imbalance between buy and sell volume occurs, the 'Hawkes process' spikes and then returns at the mean level (which was set at zero). 
+
+The Fast MA (10 periods - orange colour) and Slow MA (60 periods - red colour), cross each other and produce the green circle and red cross of the second plot (Fast MA above or bellow slow MA). The rationale behind this sampling, is that when a falling fast MA crosses a falling slow MA, the price falls (and vice verca), and thus a red arrow of the first plot is accompanied with a red cross of the second plot. Since the 'first point sampled' represents the beginning of one move, the next point that must be sampled, should signify the end of it, where a rising fast MA crosses a falling slow MA. This way, we can sample the beginning (or close to beginning) and the end of the move. Nevertheless, if the price begins to fall gradualy, with no major spikes on the 'Hawkes process', and the fast and slow MA slowly converge, there would be no sampling. Furthermore, this way of sampling is very sensitive to the parameters chosen (fast and slow MA) and as we can see in the second and fourth plot of figure \ref{fig:hawkeszoom}, there are times that the fast is not fast enough to catch the very fast price moves, but does a better job in sampling correctly the larger moves along with their ending.
+
+\subsubsection{Positive and Negative Volume}
+
 
 
 

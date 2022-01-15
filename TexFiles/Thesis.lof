@@ -39,6 +39,6 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {3.1}{\ignorespaces An example of buy (green circle) and sell (red circle) volume. The size of the markers, correspond to the amount volume traded.\relax }}{20}{figure.caption.24}%
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.2}{\ignorespaces An illustration of the four states. The first graph corresponds to the first factor and the second graph to the second factor.\relax }}{22}{figure.caption.25}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces An illustration of the four states. The first graph corresponds to the first factor and the second graph to the second factor. In the first graph, the green arrows indicate buy volume and the red ones, sell volume. In the second graph, the green circle corresponds to Fast MA > Slow MA, while the red cross, corresponds to the exact opposite.\relax }}{22}{figure.caption.25}%
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.3}{\ignorespaces A zoomed in graph, where the price is displayed in 'seconds' timeframe.\relax }}{23}{figure.caption.26}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Several plots of a 'Hawkes process' on the difference of buy and sell volume along with an example of sampling using moving averages on the above process (in 'seconds' timeframe).\relax }}{23}{figure.caption.26}%
