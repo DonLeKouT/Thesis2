@@ -19,6 +19,39 @@
 
 \refsection{0}
   \datalist[entry]{apa/global//global/global}
+    \entry{marcos}{book}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=723f4a692f09739ed98959e8b98cf81e}{%
+           family={Prado},
+           familyi={P\bibinitperiod},
+           given={Marcos\bibnamedelima Lopez},
+           giveni={M\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0,
+           prefix={de},
+           prefixi={d\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {USA, New Jersey}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{723f4a692f09739ed98959e8b98cf81e}
+      \strng{fullhash}{723f4a692f09739ed98959e8b98cf81e}
+      \strng{bibnamehash}{723f4a692f09739ed98959e8b98cf81e}
+      \strng{authorbibnamehash}{723f4a692f09739ed98959e8b98cf81e}
+      \strng{authornamehash}{723f4a692f09739ed98959e8b98cf81e}
+      \strng{authorfullhash}{723f4a692f09739ed98959e8b98cf81e}
+      \field{sortinit}{d}
+      \field{sortinithash}{c438b3d5d027251ba63f5ed538d98af5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Advances in Financial Machine Learning}
+      \field{year}{2018}
+    \endentry
     \entry{wiki_mt}{online}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=9c677286866aad38f8e9b660f5411814}{%
