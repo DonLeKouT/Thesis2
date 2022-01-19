@@ -52,6 +52,37 @@
       \field{title}{Advances in Financial Machine Learning}
       \field{year}{2018}
     \endentry
+    \entry{prod}{book}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=5f3a6090250d5761b07b04acda232be2}{%
+           family={Prodromos\bibnamedelimb E.\bibnamedelimi Tsinaslanidis},
+           familyi={P\bibinitperiod\bibinitdelim E\bibinitperiod\bibinitdelim T\bibinitperiod},
+           given={Achilleas\bibnamedelimb D.\bibnamedelimi Zapranis},
+           giveni={A\bibinitperiod\bibinitdelim D\bibinitperiod\bibinitdelim Z\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {Switzerland}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{5f3a6090250d5761b07b04acda232be2}
+      \strng{fullhash}{5f3a6090250d5761b07b04acda232be2}
+      \strng{bibnamehash}{5f3a6090250d5761b07b04acda232be2}
+      \strng{authorbibnamehash}{5f3a6090250d5761b07b04acda232be2}
+      \strng{authornamehash}{5f3a6090250d5761b07b04acda232be2}
+      \strng{authorfullhash}{5f3a6090250d5761b07b04acda232be2}
+      \field{sortinit}{P}
+      \field{sortinithash}{bb5b15f2db90f7aef79bb9e83defefcb}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Technical Analysis for Algorithmic Pattern Recognition}
+      \field{year}{2016}
+    \endentry
     \entry{wiki_mt}{online}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=9c677286866aad38f8e9b660f5411814}{%

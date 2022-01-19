@@ -668,7 +668,7 @@ def imbalance_filters(dataset, high, threshold, distance):
 
 
 @jit(nopython = True, nogil = True)
-def imbalance_exp(dataset, alpha, beta, threshold, summary = False):
+def imbalance_exp2(dataset, alpha, beta, threshold, summary = False):
     n = dataset.shape[0]
     out = np.zeros(n)
     ewma_slow = 0

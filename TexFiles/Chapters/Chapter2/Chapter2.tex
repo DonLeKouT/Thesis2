@@ -85,7 +85,7 @@ The Fast MA (10 periods - orange colour) and Slow MA (60 periods - red colour), 
 \subsubsection{Positive and Negative Volume}
 
 
-From a market microstructure perspective, the search of imbalances of signed volumes (positive volume and negative volume), could reveal the presence of information \cite{marcos}. Based on the work of de Prado, a more precise way of sampling, is to sample when imbalances become apparent in the market. These imbalances could be seen as new information. At this point we need to be precise as to what we will mean from now on, when we the word 'imbalance' is used: deviation of a feature, from our expectation that is calculated from its immediate past (short or long past depending on the parameters chosen). Soon after the imbalance occurs, a new expectation is created that changes as well as new data arrive.
+From a market microstructure perspective, the search of imbalances of signed volumes (positive volume and negative volume), could reveal the presence of information \cite{marcos}. Based on the work of de Prado, a more precise way of sampling, is to sample when imbalances become apparent in the market. These imbalances could be seen as new information. At this point we need to be precise as to what we will mean from now on, when the word 'imbalance' is used: deviation of a feature, from our expectation that is calculated from the immediate past of the feature (short or long past depending on the parameters chosen). Soon after the imbalance occurs, a new expectation is created that gets updated, as new data arrive.
 
 The 'Hawkes process' of the previous subsection, is used in order to sample the imbalances on the difference between buy and sell volume. A very similar way of sampling will be attempted here as well, by changing the 'buy' and 'sell' with 'positive' and 'negative'. We begin by calculating the sign \(b_t\) of returns \(r_t\):
 \[ 
@@ -96,9 +96,37 @@ b_{t-1} \text{ for } r_t = 0 \\
 \end{cases}
 \]
 
-The above calculation results to an array with \(\{1,-1\}\), depending on the sign of the returns. Lets denote with \( v_t \) an array that corresponds to the tick by tick volume, and also keep in mind that those arrays get updated as new data arrive. By multiplying the two arrays row by row (hadamard multiplication), the array created, has the same values as \( v_t \) but signed as positive or negative based on the returns. This array will be used in order to sample any imbalances found to the positive or the negative side. One way to do the sampling is the proposed by de Prado way, where 
+The above calculation results to an array with \(\{1,-1\}\), depending on the sign of the returns. Lets denote with \( v_t \) an array that corresponds to the tick by tick volume, and also keep in mind that those arrays get updated as new data arrive. By multiplying the two arrays row by row (Hadamard product), the array created, has the same values as \( v_t \) but signed as positive or negative based on the returns. This array will be used in order to sample any imbalances found to the positive or to the negative side. One way to do the sampling is the proposed by de Prado way, where 
 \[ \theta_T = \max(\sum_{t = t_0}^{T} b_tv_t) \]
 represents the imbalance on a non fixed interval of length, \(T\) number of ticks. Then the expectation of the next imbalance \( \mathbb{E}_0(\theta_T) \) is computed using the expectation of the next bars length \( \mathbb{E}_0(T) \) using the next formula:
 \[ \mathbb{E}_0(\theta_T) = \mathbb{E}_0(T) \max\{P[b_t=1]\mathbb{E}_0[v_t|b_t=1], (1-P[b_t=1])\mathbb{E}_0[v_t|b_t=-1]\} \]
-The above way of sampling is called \textit{Volume Runs Bars} \cite{marcos}.
 
+The above way of sampling is called \textit{Volume Runs Bars} \cite{marcos}. Basically, we will sample the imbalances of summed signed volumes. A first thought is to sample when these imbalances cross a fixed threshold. This way, we might be able to sample correctly during 'normal' volume, but at times of high (low) volume we will undersample (oversample). 
+
+In order to overcome the fixed threshold problem, we will use a fast exponential moving average (EWMA) and a slow EWMA, which actually serves as a dynamically changing threshold. The sampling will take place, when the fast EWMA crosses the slow EWMA. The EWMA, is a type of moving average, which keeps all past information with decaying weights:
+\[ \text{EWMA}_t = \alpha \cdot x_t + (1 - \alpha) \cdot \text{EWMA}_{t-1} \]
+ where \(x_t\) is the value of the variable at time \(t\) and \(\alpha\) controls the importance of the recent value vs the old ones \cite{prod}. A slow EWMA has a small \(alpha\) in order to resist temporary fluctuations, but at the same time, account for them when EWMA of time \(T > t\) is calculated. The fast EWMA on the other hand, has a bigger \(\alpha\), chosen in order to prioritize the  very recent history. An example of this sampling, can be seen on the figure bellow.
+
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 4cm]{vol_run_bin1.png} \\
+    \includegraphics[width=12cm, height = 4cm]{vol_run_coi1.png}
+	\caption{An example of volume runs bars, sampled from ticks, for Coinbase and Binance.}
+    \label{fig:vol_run}
+\end{figure}
+
+In figure \ref{fig:vol_run}, the green circles represent positive volume, and the red ones, negative volume. Visually the sampling seems to be as expected, since the positive volume is mainly found when the price is rising and the negative, when the price is falling. Furthermore, based on the parameters of the EWMA used in each exchange (Binance and Coinbase), we can see slightly different sampling.
+
+Elaborating on the above effort, we can sample positive and negative volumes from buy-only and sell-only trades. The rationale behind this decision, is to sample when negative volumes which correspond to negative returns and subsequently to a falling price (even if very short term), are associated with buy-side trades, and vice versa. 
+
+For simplicity purposes, we will sample from 'second' timeframe and not directly from tick data. At first we will construct four new columns for each exchange:
+
+\begin{enumerate}
+\item Positive volume with buy side orders
+\item Positive volume with sell side orders
+\item Negative volume with buy side orders
+\item Negative volume with sell side orders
+\end{enumerate}
+
+After resampling all exchanges to the 'second' timeframe, the newly created columns, are summed row wise for all exchanges. That results to four columns that hold volumes of all exchanges. 

@@ -2561,6 +2561,7 @@
     <bcf:citekey order="1">wiki_mt</bcf:citekey>
     <bcf:citekey order="2">marcos</bcf:citekey>
     <bcf:citekey order="3">marcos</bcf:citekey>
+    <bcf:citekey order="4">prod</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="apa">
