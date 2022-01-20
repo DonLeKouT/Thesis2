@@ -118,7 +118,7 @@ In order to overcome the fixed threshold problem, we will use a fast exponential
 
 In figure \ref{fig:vol_run}, the green circles represent positive volume, and the red ones, negative volume. Visually the sampling seems to be as expected, since the positive volume is mainly found when the price is rising and the negative, when the price is falling. Furthermore, based on the parameters of the EWMA used in each exchange (Binance and Coinbase), we can see slightly different sampling.
 
-Elaborating on the above effort, we can sample positive and negative volumes from buy-only and sell-only trades. The rationale behind this decision, is to sample when negative volumes which correspond to negative returns and subsequently to a falling price (even if very short term), are associated with buy-side trades, and vice versa. 
+Elaborating on the above effort, we can sample the difference of positive and negative volumes from buy-only and sell-only trades. The rationale behind this decision, is to sample when negative volume, which correspond to negative returns and subsequently to a falling price (even if very short term), is associated with buy-side trades, and vice versa. Additionaly, for experimenting purposes, we will sample the difference of buy and sell volume from positive and negative only trades, in order to capture the sell (buy) volume on positive (negative) price moves.
 
 For simplicity purposes, we will sample from 'second' timeframe and not directly from tick data. At first we will construct four new columns for each exchange:
 
@@ -129,4 +129,35 @@ For simplicity purposes, we will sample from 'second' timeframe and not directly
 \item Negative volume with sell side orders
 \end{enumerate}
 
-After resampling all exchanges to the 'second' timeframe, the newly created columns, are summed row wise for all exchanges. That results to four columns that hold volumes of all exchanges. 
+After resampling all exchanges to the 'second' timeframe, the newly created columns, are summed row wise for all exchanges. Using these columns, we construct 4 new ones, by simply subtracting one from the other:
+
+\begin{enumerate}
+\item Positive volume: Buy volume - Sell volume
+\item Negative volume: Buy volume - Sell volume
+\item Buy volume: Positive volume - Negative volume
+\item Sell volume: Positive volume - Negative volume
+\end{enumerate}
+
+The green (red) colour will be used to indicate positive (negative) volume while a triangle (inverted triangle) for buy (sell) volume. In figure \ref{fig:pos_neg}, upper graph, we can see the \(\text{Vol}_{Buy} - \text{Vol}_{Sell} \), when \(\text{Vol}_{Sell} > \text{Vol}_{Buy} \) under positive volume (returns). 
+ 
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 4cm]{pos1.png} \\
+    \includegraphics[width=12cm, height = 4cm]{neg1.png}
+	\caption{Buy - Sell volume imbalance on positive and negative only volume.}
+    \label{fig:pos_neg}
+\end{figure}
+
+What we expect to extract from the above sampling, is the occasions where selling volume spikes during positive returns, signaling thus a short term price reversal. Similarly, in the second graph \ref{fig:pos_neg}, we sample buying volume spikes, during negative returns (or potentialy a falling price). Again, we expect to find a short term reversal, since buying activity should stop or slow down negative returns or a falling price.
+
+Similarly, given the buy volume, we sample the difference  \(\text{Vol}_{Positive} - \text{Vol}_{Negative} \), when \(\text{Vol}_{Negative} > \text{Vol}_{Positive} \), see figure \ref{fig:buy_sell}, upper graph. On the second graph, we can see the excess of positive volume, under sell trades.
+
+This market behavior seems unintuitive. The volume that is computed in this sampling, represents the majority of volume traded in BTCUSD(T) markets. If we assume, that there is no significant volume in another exchange, the rising price with sell trades and falling price with buy trades, should be significant.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 4cm]{buy1.png} \\
+    \includegraphics[width=12cm, height = 4cm]{sell1.png}
+	\caption{Positive - Negative volume imbalance on buy and sell only trades.}
+    \label{fig:buy_sell}
+\end{figure}

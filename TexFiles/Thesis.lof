@@ -44,3 +44,7 @@
 \contentsline {figure}{\numberline {3.3}{\ignorespaces Several plots of a 'Hawkes process' on the difference of buy and sell volume along with an example of sampling using moving averages on the above process (in 'seconds' timeframe).\relax }}{23}{figure.caption.26}%
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {3.4}{\ignorespaces An example of volume runs bars, sampled from ticks, for Coinbase and Binance.\relax }}{25}{figure.caption.28}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Buy - Sell volume imbalance on positive and negative only volume.\relax }}{26}{figure.caption.29}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Positive - Negative volume imbalance on buy and sell only trades.\relax }}{27}{figure.caption.30}%
