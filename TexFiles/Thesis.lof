@@ -3,48 +3,58 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {1.1}{\ignorespaces BTCUSD Volume sampled in several timeframes\relax }}{8}{figure.caption.8}%
+\contentsline {figure}{\numberline {1.1}{\ignorespaces BTCUSD Volume sampled in several timeframes\relax }}{9}{figure.caption.8}%
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {1.2}{\ignorespaces Volume per trade (tick volume).\relax }}{9}{figure.caption.9}%
-\defcounter {refsection}{0}\relax 
-\addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Quarterly volume across spot exchanges.\relax }}{10}{figure.caption.10}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.2}{\ignorespaces BTCUSD and BTCUSDT spot trading volume (in bitcoin).\relax }}{11}{figure.caption.11}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.3}{\ignorespaces BTCUSD and BTCUSDT spot trading volume (in USD(T)).\relax }}{11}{figure.caption.12}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Mean volume per trade.\relax }}{12}{figure.caption.13}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.5}{\ignorespaces Retail trades and BTC price.\relax }}{13}{figure.caption.14}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.6}{\ignorespaces Histogram of BTCUSD and BTCUSDT no of retail trades per day\relax }}{13}{figure.caption.15}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.7}{\ignorespaces Fiat premium.\relax }}{14}{figure.caption.16}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.8}{\ignorespaces PCA analysis - 1st principal component and BTCUSD price.\relax }}{15}{figure.caption.17}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.9}{\ignorespaces KDE plot of volumes aggregated on 4h timeframe, for all exchanges.\relax }}{15}{figure.caption.18}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.10}{\ignorespaces Eigendecomposition on kendal correlation matrix for positive and negative volume for \textbf {BTCUSDT} markets.\relax }}{16}{figure.caption.19}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.11}{\ignorespaces The number of trades aggregated daily, for each exchange. Note that the upper chart is logarithmic.\relax }}{17}{figure.caption.20}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.12}{\ignorespaces The number of buy and sell trades aggregated daily, for each exchange. Both charts are logarithmic.\relax }}{17}{figure.caption.21}%
-\defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.13}{\ignorespaces The number of buy and sell trades aggregated daily, for each exchange. Both charts are logarithmic.\relax }}{18}{figure.caption.22}%
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Volume per trade (tick volume).\relax }}{10}{figure.caption.9}%
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.1}{\ignorespaces An example of buy (green circle) and sell (red circle) volume. The size of the markers, correspond to the amount volume traded.\relax }}{20}{figure.caption.24}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Quarterly volume across spot exchanges.\relax }}{11}{figure.caption.10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.2}{\ignorespaces An illustration of the four states. The first graph corresponds to the first factor and the second graph to the second factor. In the first graph, the green arrows indicate buy volume and the red ones, sell volume. In the second graph, the green circle corresponds to Fast MA > Slow MA, while the red cross, corresponds to the exact opposite.\relax }}{22}{figure.caption.25}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces BTCUSD and BTCUSDT spot trading volume (in bitcoin).\relax }}{12}{figure.caption.11}%
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Several plots of a 'Hawkes process' on the difference of buy and sell volume along with an example of sampling using moving averages on the above process (in 'seconds' timeframe).\relax }}{23}{figure.caption.26}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces BTCUSD and BTCUSDT spot trading volume (in USD(T)).\relax }}{12}{figure.caption.12}%
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.4}{\ignorespaces An example of volume runs bars, sampled from ticks, for Coinbase and Binance.\relax }}{25}{figure.caption.28}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Mean volume per trade.\relax }}{13}{figure.caption.13}%
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Buy - Sell volume imbalance on positive and negative only volume.\relax }}{26}{figure.caption.29}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Retail trades and BTC price.\relax }}{14}{figure.caption.14}%
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Positive - Negative volume imbalance on buy and sell only trades.\relax }}{27}{figure.caption.30}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Histogram of BTCUSD and BTCUSDT no of retail trades per day\relax }}{14}{figure.caption.15}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Fiat premium.\relax }}{15}{figure.caption.16}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.8}{\ignorespaces PCA analysis - 1st principal component and BTCUSD price.\relax }}{16}{figure.caption.17}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.9}{\ignorespaces KDE plot of volumes aggregated on 4h timeframe, for all exchanges.\relax }}{16}{figure.caption.18}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.10}{\ignorespaces Eigendecomposition on kendal correlation matrix for positive and negative volume for \textbf {BTCUSDT} markets.\relax }}{17}{figure.caption.19}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.11}{\ignorespaces The number of trades aggregated daily, for each exchange. Note that the upper chart is logarithmic.\relax }}{18}{figure.caption.20}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.12}{\ignorespaces The number of buy and sell trades aggregated daily, for each exchange. Both charts are logarithmic.\relax }}{18}{figure.caption.21}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.13}{\ignorespaces The number of buy and sell trades aggregated daily, for each exchange. Both charts are logarithmic.\relax }}{19}{figure.caption.22}%
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.1}{\ignorespaces An example of buying (green circle) and selling (red circle) volume. The size of the markers, correspond to the amount volume traded.\relax }}{22}{figure.caption.24}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.2}{\ignorespaces An illustration of the four states. The first graph corresponds to the first factor and the second graph to the second factor. In the first graph, the green arrows indicate buy volume and the red ones, sell volume. In the second graph, the green circle corresponds to Fast MA > Slow MA, while the red cross, corresponds to the exact opposite.\relax }}{23}{figure.caption.25}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Several plots of a 'Hawkes process' on the difference of buy and sell volume along with an example of sampling using moving averages on the above process (in 'seconds' timeframe).\relax }}{24}{figure.caption.26}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.4}{\ignorespaces An example of volume runs bars, sampled from ticks, for Coinbase and Binance.\relax }}{26}{figure.caption.28}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Buying - Selling volume imbalance on positive and negative only volume.\relax }}{27}{figure.caption.29}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Positive - Negative volume imbalance on buy and sell only trades.\relax }}{28}{figure.caption.30}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.7}{\ignorespaces KDE plot of timedeltas between consecutive trades, Coinbase.\relax }}{29}{figure.caption.31}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Speed sampled from a subset of Coinbase. The area of the circles displayed above, were calculated by aggregating the volume with respect to the sign or to the side of the trades, between two consecutive samples.\relax }}{30}{figure.caption.32}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Each circle represents one sample that actually contains several trades. The samples shown here, are selected to contain the biggest number of trades.\relax }}{30}{figure.caption.33}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.10}{\ignorespaces An example of PCA sampling on USD, USDT and combined markets on positive/negative volume.\relax }}{31}{figure.caption.35}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.11}{\ignorespaces An example of PCA sampling on USD, USDT and combined markets on buying/selling volume.\relax }}{32}{figure.caption.36}%

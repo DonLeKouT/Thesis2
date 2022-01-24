@@ -52,6 +52,37 @@
       \field{title}{Advances in Financial Machine Learning}
       \field{year}{2018}
     \endentry
+    \entry{weib}{book}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=885b2d05734f83e9cb76ff1e1f7a2137}{%
+           family={Jeffrey\bibnamedelimb R.\bibnamedelimi Russell},
+           familyi={J\bibinitperiod\bibinitdelim R\bibinitperiod\bibinitdelim R\bibinitperiod},
+           given={Robert\bibnamedelimb F.\bibnamedelimi Engle},
+           giveni={R\bibinitperiod\bibinitdelim F\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{location}{1}{%
+        {USA}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{885b2d05734f83e9cb76ff1e1f7a2137}
+      \strng{fullhash}{885b2d05734f83e9cb76ff1e1f7a2137}
+      \strng{bibnamehash}{885b2d05734f83e9cb76ff1e1f7a2137}
+      \strng{authorbibnamehash}{885b2d05734f83e9cb76ff1e1f7a2137}
+      \strng{authornamehash}{885b2d05734f83e9cb76ff1e1f7a2137}
+      \strng{authorfullhash}{885b2d05734f83e9cb76ff1e1f7a2137}
+      \field{sortinit}{J}
+      \field{sortinithash}{c45040a764d616897e7f5b30174d7b92}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Handbook of Financial Econometrics}
+      \field{year}{2010}
+    \endentry
     \entry{prod}{book}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=5f3a6090250d5761b07b04acda232be2}{%

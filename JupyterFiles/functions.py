@@ -541,7 +541,7 @@ def helpfull(dataset, from_, to):
     
     for j in np.arange(start_int,n):
         if index[j] > to:
-            results.append(j)
+            results.append(j-1)
             break
 
     return results

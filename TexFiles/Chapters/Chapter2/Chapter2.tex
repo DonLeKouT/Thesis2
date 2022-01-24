@@ -5,13 +5,13 @@ In this chapter, we will sample on BTCUSD and BTCUSDT dataset across all feature
 
 \subsection{Volume}
 
-In this section, we will use volume along with different features of choice such as, positive-negative returns and buy-sell side. We will begin with buy-sell volume, while we illustrate how the sampling could end up in signal creation.
+In this section, we will use volume along with different features of choice such as, positive-negative returns and buying-selling. We will begin with buying-selling volume, while we illustrate how the sampling could end up in signal creation.
 
-\subsubsection{Buy and Sell Volume}
+\subsubsection{Buying and Selling Volume}
 
-The dataset is created by classifying the volume into buy and sell volume, depending on the side of the trade. This classification is taking place directly on tick data. Then, the dataset is aggregated (summation) on the 'second' time interval, where two columns are created: one for the buy volume and one for the sell volume. This procedure is used for all exchanges and as we have shown, all exchanges should be used (see \ref{fig:cum}). 
+The dataset on which the next sampling is performed, is created by classifying the volume into buying and selling volume, depending on who initiated the trade (bid or ask). This classification is taking place directly on tick data. Then, the dataset is aggregated (summation) on the 'second' time interval, where two columns are created: one for the buying volume and one for the selling volume. This procedure is used for all exchanges and as we have shown, all exchanges should be used (see \ref{fig:cum}). 
 
-The latter results to a 10 column dataset where 5 columns are created for the buy volume and 5 columns for the sell volume (one column for each exchange). Lastly, the 5 columns of each side, are summed row-wise in order to create one column for buy and one column for sell volume. The last columns represent the volume that took place on all exchanges after being classified as buy and sell.
+The latter results to a 10 column dataset where 5 columns are created for the buying volume and 5 columns for the selling volume (one column for each exchange). Lastly, the 5 columns of each side, are summed row-wise in order to create one column for buy and one column for sell. The last columns represent the volume that took place on all exchanges after being classified as buying and selling.
 
 In order to model the two volumes, we will use a Hawkes process. To provide the reader with a brief explanation of the Hawkes process, we shall begin with a Poisson process, which models the number of occurences at certain time intervals. The key takeaways from Poisson processes are that the expected rate of these occurrences \( \lambda \) is stable (homogeneity) and that the expected rate of occurrences at a future time interval is independent of past occurrences. 
 
@@ -23,12 +23,12 @@ In a volume specific example the formula would be:
 \[ \lambda(t|H_t) = \lambda_0(0|H_0) + \sum_{i=1}^{N(t)}\text{Vol}(i) \cdot e^{-\delta(t-T_i)} \]
 where \(\lambda_0(0|H_0) \) is the initial intensity and \( \delta \) would be a positive dampening coefficient that implies the rate at which the function decays.
 
-Using a Hawkes process with \( \delta = 0.2 \) and \( \lambda_0 = 0 \), we modeled the buy and sell volume, and upon the new dataset, we sampled using two parallel moving averages, one slow (larger scope) and one faster (smaller window). The sampling took place, when the fast MA exceeded the slow MA by a threshold. This way, we can have an overview of the buy and sell volume surges. First thing to notice, is that most of the points sampled from the two volumes are different (see \ref{fig:hawkes1}). There is an oversampling in sudden price action and no sampling at all when price goes sideways. Furthermore, the buy volume, is found mostly in local maxima and the sell volume in local minima, which is to be expected.
+Using a Hawkes process with \( \delta = 0.2 \) and \( \lambda_0 = 0 \), we modeled the buy and sell volume, and upon the new dataset, we sampled using two parallel moving averages, one slow (larger scope) and one faster (smaller window). The sampling took place, when the fast MA exceeded the slow MA by a threshold. This way, we can have an overview of the buying and selling volume surges. First thing to notice, is that most of the points sampled from the two volumes are different (see \ref{fig:hawkes1}). There is an oversampling in sudden price action and no sampling at all when price goes sideways. Furthermore, the buying volume, is found mostly in local maxima and the selling volume in local minima, which is to be expected.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=10cm, height = 4cm]{hawkes1.png}
-    \caption{An example of buy (green circle) and sell (red circle) volume. The size of the markers, correspond to the amount volume traded.}
+    \caption{An example of buying (green circle) and selling (red circle) volume. The size of the markers, correspond to the amount volume traded.}
     \label{fig:hawkes1}
 \end{figure}
 
@@ -123,19 +123,19 @@ Elaborating on the above effort, we can sample the difference of positive and ne
 For simplicity purposes, we will sample from 'second' timeframe and not directly from tick data. At first we will construct four new columns for each exchange:
 
 \begin{enumerate}
-\item Positive volume with buy side orders
-\item Positive volume with sell side orders
-\item Negative volume with buy side orders
-\item Negative volume with sell side orders
+\item Positive volume with buying orders
+\item Positive volume with selling orders
+\item Negative volume with buying orders
+\item Negative volume with selling orders
 \end{enumerate}
 
 After resampling all exchanges to the 'second' timeframe, the newly created columns, are summed row wise for all exchanges. Using these columns, we construct 4 new ones, by simply subtracting one from the other:
 
 \begin{enumerate}
-\item Positive volume: Buy volume - Sell volume
-\item Negative volume: Buy volume - Sell volume
-\item Buy volume: Positive volume - Negative volume
-\item Sell volume: Positive volume - Negative volume
+\item Positive volume: Buying volume - Selling volume
+\item Negative volume: Buying volume - Selling volume
+\item Buying volume: Positive volume - Negative volume
+\item Selling volume: Positive volume - Negative volume
 \end{enumerate}
 
 The green (red) colour will be used to indicate positive (negative) volume while a triangle (inverted triangle) for buy (sell) volume. In figure \ref{fig:pos_neg}, upper graph, we can see the \(\text{Vol}_{Buy} - \text{Vol}_{Sell} \), when \(\text{Vol}_{Sell} > \text{Vol}_{Buy} \) under positive volume (returns). 
@@ -144,7 +144,7 @@ The green (red) colour will be used to indicate positive (negative) volume while
 	\centering
     \includegraphics[width=12cm, height = 4cm]{pos1.png} \\
     \includegraphics[width=12cm, height = 4cm]{neg1.png}
-	\caption{Buy - Sell volume imbalance on positive and negative only volume.}
+	\caption{Buying - Selling volume imbalance on positive and negative only volume.}
     \label{fig:pos_neg}
 \end{figure}
 
@@ -161,3 +161,82 @@ This market behavior seems unintuitive. The volume that is computed in this samp
 	\caption{Positive - Negative volume imbalance on buy and sell only trades.}
     \label{fig:buy_sell}
 \end{figure}
+
+
+\subsection{Speed of the market}
+
+We define the 'speed of the market' to be the rate of incoming trades. Since the trades arrive in an asynchronous way, the \texttt{TimeDelta} between two consecutive trades, vary over time. There will be occasions when the \texttt{TimeDelta} contracts and others when it expands. We are interested in those times where it remains contracted for a 'sufficient' number of trades, and as above, the threshold for what is 'sufficient', will dynamically change.
+
+The \texttt{DateTime} column of our dataset, is sampled from milliseconds (1 second = 1,000 milliseconds). After been transformed to \texttt{Unix} time, we are left with an array of 17 digits integers. The high volume - high transaction rates exchanges, (Binance, Coinbase, Huobi) exhibit many transactions that occur at the same millisecond. That could be an indication of high frequency trading, or iceberg orders. 
+
+We transform the \texttt{DateTime} array in the following way: at first we compute the first difference in order to calculate the \texttt{TimeDelta}. Then we replace the zeroes (trades that occured the same millisecond) with a number \(z\) such that \( 0 < z < 1 \). The resulting array \texttt{dt}, contains integers as \texttt{TimeDelta} between trades that occured in different time, and a float \(z\), for trades that happened the exact same time. Lastly, we compute \texttt{speed} as:
+\[ \texttt{speed} = \frac{1}{\texttt{dt}} \] 
+
+The resulting array \texttt{speed} contains floats \( < 1 \) everywhere except for the trades that happened the same time, where the values are \( > 1 \). At times, when there are few trades or no trades per (milli) second, the \texttt{speed} takes values, \( < \frac{1}{100000} \). When trades though occur at the same time, the \texttt{speed} spikes become pronounced. In order to sample, we will create the cumulative sums of the \texttt{TimeDelta}. If transaction rates are steady, there will be no sample. If though they change rapidly, an imbalance will transpire in the form of a spike, and thus, that point will be sampled.
+
+By slicing the Coinbase dataset, from \texttt{2020-12-18 00:00:01.086} to \texttt{2021-02-10 23:59:59.700}, we compute the \texttt{TimeDelta} between the two dates in milliseconds: \( 4,751,998,614 \). If the arrival of trades were uniformly distributed, we would expect one trade every approximately \( 295 \) milliseconds.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=10cm, height = 4cm]{kde_time.png}
+	\caption{KDE plot of timedeltas between consecutive trades, Coinbase.}
+    \label{fig:kde_time}
+\end{figure}
+
+As we can see in figure \ref{fig:kde_time}, the \texttt{TimeDeltas} are not normally distributed while the proposed distributions to model trade arrival times, are the Exponential and the Weibull \cite{weib}. In the above dataset, the \(28.57\%\) of the trades, are executed at the same millisecond while the \(38.34\%\), are less than \(295.769\) milliseconds (\(0.295\) seconds) away. By clustering the trades that were recorded on the same millisecond, we find that the mean amount of volume of these clusters were \( 0.32 \) btc, while there were significant clusters with more than 50 btc each.
+
+A characteristic of these clusters is that the entire volume that was traded whithin the millisecond, was either buy or sell volume and thus we can assume that they served a specific purpose. Furthermore, note that the \(28.57\%\) of 'same millisecond' trades, accounts for the \(44.23\%\) of total volume traded, with mean trading volume of \(0.125\) btc. We conclude that these trades should be sampled carefully, with buy-sell side volume in mind, positive-negative volume, end the effect of these trades in the returns as well.
+
+In the figure bellow \ref{fig:speed_coi}, we showcase an example of sampling with respect to the speed, for the market of Coinbase. The algorithm used to sample the imbalances with regard to speed, is the same as in positive-negative volume sampling. That means, that each imbalance is recorded, and the bar created, consists of all information aggregated between the two samples, while no further information is given on the 'millisecond' trades.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 4cm]{speed_coi1.png} \\
+    \includegraphics[width=12cm, height = 4cm]{speed_coi2.png}
+	\caption{Speed sampled from a subset of Coinbase. The area of the circles displayed above, were calculated by aggregating the volume with respect to the sign or to the side of the trades, between two consecutive samples.}
+    \label{fig:speed_coi}
+\end{figure}
+
+By further enhancing the above sampling, we will extract all milliseconds that 'contain' more than one trade, and sample only on these trades, assuming that they were executed from informed traders. In order to create the figure bellow \ref{fig:milli1}, the 'millisecond trades' were extracted and aggregated into one sample, keeping the difference of buy-sell volume, positive-negative volume, number of trades and cumulative returns (\texttt{cumprod}). Out of the new dataset, the \(2500\) samples (out of approximately \(2,000,000\)) with the most trades, were plotted. The graph bellow, is a zoom-in on the actual plot.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 4cm]{milli1.png}
+	\caption{Each circle represents one sample that actually contains several trades. The samples shown here, are selected to contain the biggest number of trades.}
+    \label{fig:milli1}
+\end{figure}
+
+
+
+\subsubsection{PCA Sampling}
+
+The term \textit{PCA Sampling}, refers to sampling, when all exchanges converge in a specific behavior. That behavior could be a rising volume, increased rate of transactions, increased buying or selling volume etc. In this sampling, it is assumed that all exchanges are of 'equal' importance, even though different sampling for USDT and USD markets, is presented as well. The rationale behind this idea, is that similar activity on all exchanges, should be indicative of identical information across the market.
+
+The figure bellow \ref{fig:pca_sampl1}, illustrates a simple PCA sampling effort. The sampling took place on the 'minute' timeframe of positive volume (green circle) and negative volume (red circle). A PCA analysis (with covariance matrix) is applied every \(200\) minutes in an overlapping manner, and a sample is taken if the explained variance ratio of the 1st principal component, is greater than \(0.9\). The same could be applied on buying/selling volume, speed of the market, high speed trades (the 'millisecond' iceberg trades from previous section) and generally, on meaningful subsets or transformations of the dataset.
+
+ 
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 4cm]{pca_sampl1.png} \\
+    \includegraphics[width=12cm, height = 4cm]{pca_sampl2.png} \\
+    \includegraphics[width=12cm, height = 4cm]{pca_sampl3.png}
+	\caption{An example of PCA sampling on USD, USDT and combined markets on positive/negative volume.}
+    \label{fig:pca_sampl1}
+\end{figure}
+
+The first thing to notice, is that under the same parameters, the algorithm sampled more frequently on the USDT market. On the other hand, on the USD market, it seems to undersample, since there are fewer times when the 1st PC was greater than \(0.9\). The combined market, shows a different picture from the USDT (and the USD) market and even after adjusting the parameters in a way to sample approximately the same number of points in both occasions, the sampling was different enough, to justify both sampling efforts in one's arsenal.
+
+We repeat the same thing as above but this time on buying and selling volume (see figure \ref{fig:pca_sampl2}). The parameters remain the same (window for PCA = \(200\) minutes, threshold to sample is 1st PC > \(0.9\)). By contrasting the binance-huobi graph from above with the one from bellow, we observe that the algorithm sampled positive volume with selling activity and vice verca in many cases. That creates an hypothesis to be answered, as to whether this pattern is to be found mostly in local maxima and minima.
+
+
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[width=12cm, height = 4cm]{pca_sampl4.png} \\
+    \includegraphics[width=12cm, height = 4cm]{pca_sampl5.png} \\
+    \includegraphics[width=12cm, height = 4cm]{pca_sampl6.png}
+	\caption{An example of PCA sampling on USD, USDT and combined markets on buying/selling volume.}
+    \label{fig:pca_sampl2}
+\end{figure}
+
+

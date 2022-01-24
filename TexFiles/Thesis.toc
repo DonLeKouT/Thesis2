@@ -1,22 +1,26 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \babel@toc {american}{}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {1}Introduction}{8}{chapter.1}%
+\contentsline {chapter}{\numberline {1}Introduction}{9}{chapter.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1.1}Problem Statement}{8}{section.1.1}%
+\contentsline {section}{\numberline {1.1}Problem Statement}{9}{section.1.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {2}Exploration}{10}{chapter.2}%
+\contentsline {chapter}{\numberline {2}Exploration}{11}{chapter.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.1}Introduction}{10}{section.2.1}%
+\contentsline {section}{\numberline {2.1}Introduction}{11}{section.2.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.2}Volume}{10}{section.2.2}%
+\contentsline {section}{\numberline {2.2}Volume}{11}{section.2.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {3}Sampling}{19}{chapter.3}%
+\contentsline {chapter}{\numberline {3}Sampling}{20}{chapter.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}Introduction}{19}{section.3.1}%
+\contentsline {section}{\numberline {3.1}Introduction}{20}{section.3.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.1}Volume}{19}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.1}Volume}{20}{subsection.3.1.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Buy and Sell Volume}{19}{section*.23}%
+\contentsline {subsubsection}{Buying and Selling Volume}{20}{section*.23}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Positive and Negative Volume}{24}{section*.27}%
+\contentsline {subsubsection}{Positive and Negative Volume}{25}{section*.27}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.2}Speed of the market}{28}{subsection.3.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{PCA Sampling}{30}{section*.34}%

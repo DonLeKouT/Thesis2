@@ -162,7 +162,7 @@ where:
 \item \(G_{x,y} = \sum{t_i(t_i-1)}\) where \(t_i\) is the number of tied values in the \(i\) group of the \(\{x,y\}\) variable
 \end{itemize}
 
-For the next figures, we classified the volume \(V\) into positive volume and negative volume. The computations involved the sign of the returns \(b_t = sign\{p_t - p_{t-1}\}\), where \(p_t\) is the price at time \(t\) (this computation took place on tick data therefore \(t\) is the time measured in number of ticks), multiplied with volume at time \(t-1\) : \(b_t \cdot V_{t-1}\). This computation created an additional two volumes. The rationale behind this, is that negative volume will be responsible for negative returns and positive volume for positive returns. 
+For the next figures, we classified the volume \(V\) into positive volume and negative volume. The computations involved the sign of the returns \(b_t = sign\{p_t - p_{t-1}\}\), where \(p_t\) is the price at time \(t\) (this computation took place on tick data therefore \(t\) is the time measured in number of ticks), multiplied with volume at time \(t-1\) : \(b_t \cdot V_{t-1}\). This computation created an additional two volumes: the positive volume where \(b_t > 0\) and the negative volume where \(b_t < 0\). The rationale behind this, is that negative volume will be responsible for negative returns and positive volume for positive returns. 
 
 \begin{figure}[H]
 	\centering
@@ -188,7 +188,7 @@ Next, we visualize the number of trades that take place in each exchange. In the
     \label{fig:nooftrades}
 \end{figure}
 
-In the next figure \ref{fig:nooftrades2}, we are separating the buy from the sell trades. First thing to notice is that our data is corrupted, since for approximately 15 days, all trades are classified as buy-side trades. Due to this shortcoming, in any attempt to use the side of the trade, we will have to exclude this portion of the dataset. Furthermore, the Binance, as expected, processes the largest amount of orders, either buy or sell, but in several spikes, Huobi seems to catch or even suprass Binance. Last but not least, it is interesting that the amount of trades in Coinbase's BTCUSD pair, are steadily increasing, catching up those of the BTCUSDT market.
+In the next figure \ref{fig:nooftrades2}, we are separating the buying from the selling trades. First thing to notice is that our data is corrupted, since for approximately 15 days, all trades are classified as buy-side trades. Due to this shortcoming, in any attempt to use the side of the trade, we will have to exclude this portion of the dataset. Furthermore, the Binance, as expected, processes the largest amount of orders, either buying or selling, but in several spikes, Huobi seems to catch or even suprass Binance. Last but not least, it is interesting that the amount of trades in Coinbase's BTCUSD pair, are steadily increasing, catching up those of the BTCUSDT market.
 
 \begin{figure}[H]
 	\centering
@@ -200,7 +200,7 @@ In the next figure \ref{fig:nooftrades2}, we are separating the buy from the sel
 
 
 The next upper graph \ref{fig:cum}, is produced by taking the cumulative sums of buy side and sell side orders across all exchanges, and subtracting one from the other: 
-\[ cumsum\{Buy\_side\_volume - Sell\_side\_volume\} \]
+\[ \text{cumsum}\{\text{Vol}_{\text{Buying}} - \text{Vol}_{\text{Selling}}\} \]
 Just before the major bullrun of 2020-2021, the sell volume surpassed by far the buy volume, indicative of the uncertainty of that period (Covid19). Around October 2020, the cumulative sell volume peaked, as shown in the minimum of the graph. From then and on, the buy volume was steadily increasing, which coincides with the price action, at the beginning of the 2020-2021 bull run.  
 
 The second graph is produced by taking the cumsum of the difference of buy and sell volume, but for each exchange individually. An interesting finding is that coinbase and bitstamp are processing more buy side volume than sell side, and more buy volume than any other exchange. The exact opposite is true for Binance, where sell volume is the highest. That alligns with our prior findings, in that BTCUSD market is the entrance of the 'first time' bitcoin buyer, who is attracted during the bull run. 
@@ -215,4 +215,4 @@ The second graph is produced by taking the cumsum of the difference of buy and s
 \end{figure}
 
 
-This disrepancy makes clear that even though each exchange has its own pool of trades, the market dynamics are such, that we need to concern the exchanges not only individually, but as a unified pool of liquidity as well, where one exchange is used mostly from buyers and another on, mostly from sellers. The latter is possible, due to the easy transfering of tokens between exchanges. Especially USDT, XRP, XLM and DOGE amongst others, seem to have enough liquidity, and very low transaction finality time, to be prime candidates for transfering value fast and cheap across exchanges (in contrast to fiat). 
+This disrepancy makes clear that even though each exchange has its own pool of trades, the market dynamics are such, that we need to concern the exchanges not only individually, but as a unified pool of liquidity as well, where one exchange is used mostly from buyers and another one, mostly from sellers. The latter is possible, due to the easy transfering of tokens between exchanges. Especially USDT, XRP, XLM and DOGE amongst others, seem to have enough liquidity, and very low transaction finality time, to be prime candidates for transfering value fast and cheap across exchanges (in contrast to fiat). 
