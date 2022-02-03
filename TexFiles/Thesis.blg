@@ -1,17 +1,17 @@
 [0] Config.pm:304> INFO - This is Biber 2.14 (beta)
 [0] Config.pm:307> INFO - Logfile is 'Thesis.blg'
-[49] biber:322> INFO - === Δευ Ιαν 24, 2022, 01:04:50
-[57] Biber.pm:415> INFO - Reading 'Thesis.bcf'
-[107] Biber.pm:943> INFO - Found 4 citekeys in bib section 0
-[117] Biber.pm:4256> INFO - Processing section 0
-[117] Utils.pm:75> INFO - Globbing data source '/home/donlekout/Documents/Thesis/TexFiles/Chapters/References/bibtex.bib'
-[117] Utils.pm:91> INFO - Globbed data source '/home/donlekout/Documents/Thesis/TexFiles/Chapters/References/bibtex.bib' to /home/donlekout/Documents/Thesis/TexFiles/Chapters/References/bibtex.bib
-[122] Biber.pm:4455> INFO - Looking for bibtex format file '/home/donlekout/Documents/Thesis/TexFiles/Chapters/References/bibtex.bib' for section 0
-[123] bibtex.pm:1653> INFO - LaTeX decoding ...
-[128] bibtex.pm:1471> INFO - Found BibTeX data source '/home/donlekout/Documents/Thesis/TexFiles/Chapters/References/bibtex.bib'
-[225] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[225] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[225] Biber.pm:4084> INFO - Sorting list 'apa/global//global/global' of type 'entry' with template 'apa' and locale 'en-US'
-[225] Biber.pm:4090> INFO - No sort tailoring available for locale 'en-US'
-[229] bbl.pm:652> INFO - Writing 'Thesis.bbl' with encoding 'UTF-8'
-[231] bbl.pm:755> INFO - Output to Thesis.bbl
+[46] biber:322> INFO - === Τρι Ιαν 25, 2022, 21:11:41
+[53] Biber.pm:415> INFO - Reading 'Thesis.bcf'
+[96] Biber.pm:943> INFO - Found 9 citekeys in bib section 0
+[105] Biber.pm:4256> INFO - Processing section 0
+[105] Utils.pm:75> INFO - Globbing data source '/home/donlekout/Documents/Thesis/TexFiles/Chapters/References/bibtex.bib'
+[105] Utils.pm:91> INFO - Globbed data source '/home/donlekout/Documents/Thesis/TexFiles/Chapters/References/bibtex.bib' to /home/donlekout/Documents/Thesis/TexFiles/Chapters/References/bibtex.bib
+[111] Biber.pm:4455> INFO - Looking for bibtex format file '/home/donlekout/Documents/Thesis/TexFiles/Chapters/References/bibtex.bib' for section 0
+[111] bibtex.pm:1653> INFO - LaTeX decoding ...
+[117] bibtex.pm:1471> INFO - Found BibTeX data source '/home/donlekout/Documents/Thesis/TexFiles/Chapters/References/bibtex.bib'
+[154] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[154] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[154] Biber.pm:4084> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[154] Biber.pm:4090> INFO - No sort tailoring available for locale 'en-US'
+[161] bbl.pm:652> INFO - Writing 'Thesis.bbl' with encoding 'UTF-8'
+[163] bbl.pm:755> INFO - Output to Thesis.bbl

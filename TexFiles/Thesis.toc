@@ -1,26 +1,30 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \babel@toc {american}{}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {1}Introduction}{9}{chapter.1}%
+\contentsline {chapter}{\numberline {1}Introduction}{5}{chapter.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1.1}Problem Statement}{9}{section.1.1}%
+\contentsline {section}{\numberline {1.1}Problem Statement}{5}{section.1.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {2}Exploration}{11}{chapter.2}%
+\contentsline {section}{\numberline {1.2}Literature Review}{6}{section.1.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.1}Introduction}{11}{section.2.1}%
+\contentsline {chapter}{\numberline {2}Exploration}{8}{chapter.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.2}Volume}{11}{section.2.2}%
+\contentsline {section}{\numberline {2.1}Introduction}{8}{section.2.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {3}Sampling}{20}{chapter.3}%
+\contentsline {section}{\numberline {2.2}Volume}{8}{section.2.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}Introduction}{20}{section.3.1}%
+\contentsline {chapter}{\numberline {3}Sampling}{17}{chapter.3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.1}Volume}{20}{subsection.3.1.1}%
+\contentsline {section}{\numberline {3.1}Introduction}{17}{section.3.1}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Buying and Selling Volume}{20}{section*.23}%
+\contentsline {section}{\numberline {3.2}Volume}{17}{section.3.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Positive and Negative Volume}{25}{section*.27}%
+\contentsline {subsubsection}{Buying and Selling Volume}{17}{section*.19}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.2}Speed of the market}{28}{subsection.3.1.2}%
+\contentsline {subsubsection}{Positive and Negative Volume}{22}{section*.23}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{PCA Sampling}{30}{section*.34}%
+\contentsline {section}{\numberline {3.3}Speed of the market}{25}{section.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.4}PCA Sampling}{27}{section.3.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.5}Price-Premium Sampling}{29}{section.3.5}%

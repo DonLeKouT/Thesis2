@@ -1,9 +1,9 @@
 
 \section{Introduction}
 
-In this chapter, we will sample on BTCUSD and BTCUSDT dataset across all features and more specifically volume, side of the trade, speed of the market, and convergence of exchanges in various features. For simplicity reasons, when sampling takes place on all exchanges, the dataset will be aggregated to the 'second' or 'minute' interval (the 'minute' interval sampling will be used mostly for plotting purposes). In other occasions, the sampling will take place directly on raw tick data, nevertheless, in order to create the dataset for all exchanges, some sort of aggregation must be used, most probably in respect to time.
+In this chapter, we will sample on BTCUSD and BTCUSDT dataset across all features and more specifically volume, side of the trade, speed of the market, and convergence of exchanges in various features. For simplicity reasons, when sampling takes place on all exchanges, the dataset will be aggregated to the 'second' or 'minute' interval (the 'minute' interval sampling will be used mostly for plotting purposes). In other occasions, the sampling will take place directly on raw tick data, nevertheless, in order to create the dataset for all exchanges, some sort of aggregation must be used, mostly with respect to time.
 
-\subsection{Volume}
+\section{Volume}
 
 In this section, we will use volume along with different features of choice such as, positive-negative returns and buying-selling. We will begin with buying-selling volume, while we illustrate how the sampling could end up in signal creation.
 
@@ -17,7 +17,7 @@ In order to model the two volumes, we will use a Hawkes process. To provide the 
 
 In order to study more complex phenomena, a Non-homogeneous Poisson process could be used, where the future events are still independent of past phenomena, but \( \lambda \) is now a function of time. This particular idea fits somewhat with market behavior, in that the expected rate of returns (or as we will later show), the expected rate of volume traded, does seemingly not behave independently of the time interval, but fluctuates locally. There are certain periods of time where the volume that is expected to be traded is higher (moments of behavior co-ordination). For the function \( \lambda(t) \) to be called a deterministic function (and also non-homogeneous Poisson process) there are certain axioms that need to be held. This function then is called an “Intensity function”.
 
-Lastly, in addition to the above, if the intensity function is not stable, but is affected by the history of the timeseries up to time \(t\), the process is called Hawkes process. A Hawkes process is a self-exciting process, which its past events affect the current value of the process. There also exist other similar approaches to Hawkes, such as convolutional neural networks which are mostly used for image classification that use a weighted average of previous values. The problem with this approach, contrary to Hawkes is that this approach would enforce static dependencies while Hawkes intensity function uses the \(N(t)\) counting process as a positive reinforcement that decays exponentially in such a way that past events that are close to time \(t\), affect the value of the function much more than, say older events that are further away from \(t\). 
+Lastly, in addition to the above, if the intensity function is not stable, but is affected by the history of the timeseries up to time \(t\), the process is called Hawkes process. A Hawkes process is a self-exciting process, which its past events affect the current value of the process. There also exist other similar approaches to Hawkes, such as convolutional neural networks which are mostly used for image classification that use a weighted average of previous values. The problem with this approach, contrary to Hawkes is that this approach would enforce static dependencies while Hawkes intensity function uses the \(N(t)\) counting process as a positive reinforcement that decays exponentially in such a way that past events that are close to time \(t\), affect the value of the function much more than, say older events that are further away from \(t\) \cite{hawkes2}. 
 
 In a volume specific example the formula would be:
 \[ \lambda(t|H_t) = \lambda_0(0|H_0) + \sum_{i=1}^{N(t)}\text{Vol}(i) \cdot e^{-\delta(t-T_i)} \]
@@ -118,7 +118,7 @@ In order to overcome the fixed threshold problem, we will use a fast exponential
 
 In figure \ref{fig:vol_run}, the green circles represent positive volume, and the red ones, negative volume. Visually the sampling seems to be as expected, since the positive volume is mainly found when the price is rising and the negative, when the price is falling. Furthermore, based on the parameters of the EWMA used in each exchange (Binance and Coinbase), we can see slightly different sampling.
 
-Elaborating on the above effort, we can sample the difference of positive and negative volumes from buy-only and sell-only trades. The rationale behind this decision, is to sample when negative volume, which correspond to negative returns and subsequently to a falling price (even if very short term), is associated with buy-side trades, and vice versa. Additionaly, for experimenting purposes, we will sample the difference of buy and sell volume from positive and negative only trades, in order to capture the sell (buy) volume on positive (negative) price moves.
+Elaborating on the above effort, we can sample the difference of positive and negative volumes from buy-only and sell-only trades. The rationale behind this decision, is to sample when negative volume, which corresponds to negative returns and subsequently to a falling price (even if very short term), is associated with buy-side trades, and vice versa. Additionaly, for experimenting purposes, we will sample the difference of buy and sell volume from positive and negative only trades, in order to capture the sell (buy) volume on positive (negative) price moves.
 
 For simplicity purposes, we will sample from 'second' timeframe and not directly from tick data. At first we will construct four new columns for each exchange:
 
@@ -163,7 +163,7 @@ This market behavior seems unintuitive. The volume that is computed in this samp
 \end{figure}
 
 
-\subsection{Speed of the market}
+\section{Speed of the market}
 
 We define the 'speed of the market' to be the rate of incoming trades. Since the trades arrive in an asynchronous way, the \texttt{TimeDelta} between two consecutive trades, vary over time. There will be occasions when the \texttt{TimeDelta} contracts and others when it expands. We are interested in those times where it remains contracted for a 'sufficient' number of trades, and as above, the threshold for what is 'sufficient', will dynamically change.
 
@@ -172,7 +172,7 @@ The \texttt{DateTime} column of our dataset, is sampled from milliseconds (1 sec
 We transform the \texttt{DateTime} array in the following way: at first we compute the first difference in order to calculate the \texttt{TimeDelta}. Then we replace the zeroes (trades that occured the same millisecond) with a number \(z\) such that \( 0 < z < 1 \). The resulting array \texttt{dt}, contains integers as \texttt{TimeDelta} between trades that occured in different time, and a float \(z\), for trades that happened the exact same time. Lastly, we compute \texttt{speed} as:
 \[ \texttt{speed} = \frac{1}{\texttt{dt}} \] 
 
-The resulting array \texttt{speed} contains floats \( < 1 \) everywhere except for the trades that happened the same time, where the values are \( > 1 \). At times, when there are few trades or no trades per (milli) second, the \texttt{speed} takes values, \( < \frac{1}{100000} \). When trades though occur at the same time, the \texttt{speed} spikes become pronounced. In order to sample, we will create the cumulative sums of the \texttt{TimeDelta}. If transaction rates are steady, there will be no sample. If though they change rapidly, an imbalance will transpire in the form of a spike, and thus, that point will be sampled.
+The resulting array \texttt{speed} contains floats \( < 1 \) everywhere except for the trades that happened the same time, where the values are \( > 1 \). At times, when there are few trades or no trades per (milli) second, the \texttt{speed} takes values, \( < \frac{1}{100000} \). When trades though occur at the same time, the \texttt{speed} spikes become pronounced. In order to sample, we will create the cumulative sums of the \texttt{TimeDelta}. If transaction rates are steady, there will be no sample. Conversely, if they change rapidly, an imbalance will transpire in the form of a spike, and thus, that point will be sampled.
 
 By slicing the Coinbase dataset, from \texttt{2020-12-18 00:00:01.086} to \texttt{2021-02-10 23:59:59.700}, we compute the \texttt{TimeDelta} between the two dates in milliseconds: \( 4,751,998,614 \). If the arrival of trades were uniformly distributed, we would expect one trade every approximately \( 295 \) milliseconds.
 
@@ -185,7 +185,7 @@ By slicing the Coinbase dataset, from \texttt{2020-12-18 00:00:01.086} to \textt
 
 As we can see in figure \ref{fig:kde_time}, the \texttt{TimeDeltas} are not normally distributed while the proposed distributions to model trade arrival times, are the Exponential and the Weibull \cite{weib}. In the above dataset, the \(28.57\%\) of the trades, are executed at the same millisecond while the \(38.34\%\), are less than \(295.769\) milliseconds (\(0.295\) seconds) away. By clustering the trades that were recorded on the same millisecond, we find that the mean amount of volume of these clusters were \( 0.32 \) btc, while there were significant clusters with more than 50 btc each.
 
-A characteristic of these clusters is that the entire volume that was traded whithin the millisecond, was either buy or sell volume and thus we can assume that they served a specific purpose. Furthermore, note that the \(28.57\%\) of 'same millisecond' trades, accounts for the \(44.23\%\) of total volume traded, with mean trading volume of \(0.125\) btc. We conclude that these trades should be sampled carefully, with buy-sell side volume in mind, positive-negative volume, end the effect of these trades in the returns as well.
+A characteristic of these clusters, is that the entire volume that was traded whithin the millisecond, was either buying or selling. Furthermore, note, that the 'same millisecond' trades, which account for the \(28.57\%\) of all trades, control approximately \(44.23\%\) of total volume traded. We conclude that these trades should be sampled carefully, with buying and/or selling volume in mind, positive and/or negative volume, and the effect of these trades in the returns as well.
 
 In the figure bellow \ref{fig:speed_coi}, we showcase an example of sampling with respect to the speed, for the market of Coinbase. The algorithm used to sample the imbalances with regard to speed, is the same as in positive-negative volume sampling. That means, that each imbalance is recorded, and the bar created, consists of all information aggregated between the two samples, while no further information is given on the 'millisecond' trades.
 
@@ -193,22 +193,22 @@ In the figure bellow \ref{fig:speed_coi}, we showcase an example of sampling wit
 	\centering
     \includegraphics[width=12cm, height = 4cm]{speed_coi1.png} \\
     \includegraphics[width=12cm, height = 4cm]{speed_coi2.png}
-	\caption{Speed sampled from a subset of Coinbase. The area of the circles displayed above, were calculated by aggregating the volume with respect to the sign or to the side of the trades, between two consecutive samples.}
+	\caption{Speed sampled from a subset of Coinbase. The area of the circles displayed above, were calculated by aggregating the volume with respect to the sign (positive-negative) or to the side that initiated the trade (buying-selling), between two consecutive samples.}
     \label{fig:speed_coi}
 \end{figure}
 
-By further enhancing the above sampling, we will extract all milliseconds that 'contain' more than one trade, and sample only on these trades, assuming that they were executed from informed traders. In order to create the figure bellow \ref{fig:milli1}, the 'millisecond trades' were extracted and aggregated into one sample, keeping the difference of buy-sell volume, positive-negative volume, number of trades and cumulative returns (\texttt{cumprod}). Out of the new dataset, the \(2500\) samples (out of approximately \(2,000,000\)) with the most trades, were plotted. The graph bellow, is a zoom-in on the actual plot.
+By further enhancing the above sampling, we will extract all milliseconds that 'contain' more than one trade, and sample only on these trades, assuming that they were executed from informed traders. In order to create the figure bellow \ref{fig:milli1}, the 'millisecond trades' were extracted and aggregated into one sample each (all trades of the same millisecond, aggregated to one trade), keeping the difference of buy-sell volume, positive-negative volume, number of trades and cumulative returns (\texttt{cumprod}). Out of the new dataset, the \(2500\) samples (out of approximately \(2,000,000\)) with the most trades, were plotted. The graph bellow, is a zoom-in on the actual plot.
 
 \begin{figure}[H]
 	\centering
     \includegraphics[width=12cm, height = 4cm]{milli1.png}
-	\caption{Each circle represents one sample that actually contains several trades. The samples shown here, are selected to contain the biggest number of trades.}
+	\caption{Each circle represents one sample that actually contains several trades. The samples shown here, are selected to contain the largest number of trades.}
     \label{fig:milli1}
 \end{figure}
 
 
 
-\subsubsection{PCA Sampling}
+\section{PCA Sampling}
 
 The term \textit{PCA Sampling}, refers to sampling, when all exchanges converge in a specific behavior. That behavior could be a rising volume, increased rate of transactions, increased buying or selling volume etc. In this sampling, it is assumed that all exchanges are of 'equal' importance, even though different sampling for USDT and USD markets, is presented as well. The rationale behind this idea, is that similar activity on all exchanges, should be indicative of identical information across the market.
 
@@ -226,7 +226,7 @@ The figure bellow \ref{fig:pca_sampl1}, illustrates a simple PCA sampling effort
 
 The first thing to notice, is that under the same parameters, the algorithm sampled more frequently on the USDT market. On the other hand, on the USD market, it seems to undersample, since there are fewer times when the 1st PC was greater than \(0.9\). The combined market, shows a different picture from the USDT (and the USD) market and even after adjusting the parameters in a way to sample approximately the same number of points in both occasions, the sampling was different enough, to justify both sampling efforts in one's arsenal.
 
-We repeat the same thing as above but this time on buying and selling volume (see figure \ref{fig:pca_sampl2}). The parameters remain the same (window for PCA = \(200\) minutes, threshold to sample is 1st PC > \(0.9\)). By contrasting the binance-huobi graph from above with the one from bellow, we observe that the algorithm sampled positive volume with selling activity and vice verca in many cases. That creates an hypothesis to be answered, as to whether this pattern is to be found mostly in local maxima and minima.
+We repeat the same thing as above but this time on buying and selling volume (see figure \ref{fig:pca_sampl2}). The parameters remain the same (window for PCA = \(200\) minutes, threshold to sample is 1st PC > \(0.9\)). By contrasting the binance-huobi graph from above with the one from bellow, we observe that the algorithm sampled positive volume with selling activity and vice verca in many cases. That creates an hypothesis to be tested, as to whether this pattern is to be found mostly in local maxima and minima.
 
 
 
@@ -240,3 +240,6 @@ We repeat the same thing as above but this time on buying and selling volume (se
 \end{figure}
 
 
+\section{Price-Premium Sampling}
+
+\textit{TODO}

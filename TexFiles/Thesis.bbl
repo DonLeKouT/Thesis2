@@ -18,48 +18,68 @@
 
 
 \refsection{0}
-  \datalist[entry]{apa/global//global/global}
-    \entry{marcos}{book}{}
+  \datalist[entry]{nty/global//global/global}
+    \entry{med}{online}{}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=723f4a692f09739ed98959e8b98cf81e}{%
-           family={Prado},
-           familyi={P\bibinitperiod},
-           given={Marcos\bibnamedelima Lopez},
-           giveni={M\bibinitperiod\bibinitdelim L\bibinitperiod},
-           givenun=0,
-           prefix={de},
-           prefixi={d\bibinitperiod}}}%
+        {{hash=351e57f6ee38aa8dde6821e29953be5e}{%
+           family={Bogart},
+           familyi={B\bibinitperiod},
+           given={Spencer},
+           giveni={S\bibinitperiod}}}%
       }
-      \list{location}{1}{%
-        {USA, New Jersey}%
-      }
-      \list{publisher}{1}{%
-        {Wiley}%
-      }
-      \strng{namehash}{723f4a692f09739ed98959e8b98cf81e}
-      \strng{fullhash}{723f4a692f09739ed98959e8b98cf81e}
-      \strng{bibnamehash}{723f4a692f09739ed98959e8b98cf81e}
-      \strng{authorbibnamehash}{723f4a692f09739ed98959e8b98cf81e}
-      \strng{authornamehash}{723f4a692f09739ed98959e8b98cf81e}
-      \strng{authorfullhash}{723f4a692f09739ed98959e8b98cf81e}
-      \field{sortinit}{d}
-      \field{sortinithash}{c438b3d5d027251ba63f5ed538d98af5}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
-      \true{uniqueprimaryauthor}
+      \strng{namehash}{351e57f6ee38aa8dde6821e29953be5e}
+      \strng{fullhash}{351e57f6ee38aa8dde6821e29953be5e}
+      \strng{bibnamehash}{351e57f6ee38aa8dde6821e29953be5e}
+      \strng{authorbibnamehash}{351e57f6ee38aa8dde6821e29953be5e}
+      \strng{authornamehash}{351e57f6ee38aa8dde6821e29953be5e}
+      \strng{authorfullhash}{351e57f6ee38aa8dde6821e29953be5e}
+      \field{sortinit}{B}
+      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{title}{Advances in Financial Machine Learning}
-      \field{year}{2018}
+      \field{title}{Bitcoin is (Still) a Demographic Mega-trend: Data Update}
+      \field{year}{2020}
+      \verb{urlraw}
+      \verb https://medium.com/blockchain-capital-blog/bitcoin-is-still-a-demographic-mega-trend-data-update-c50df59a6cb3
+      \endverb
+      \verb{url}
+      \verb https://medium.com/blockchain-capital-blog/bitcoin-is-still-a-demographic-mega-trend-data-update-c50df59a6cb3
+      \endverb
+    \endentry
+    \entry{app}{online}{}
+      \name{author}{1}{}{%
+        {{hash=d55a57c88a14828a53b9e8db48c889d1}{%
+           family={Goldberg},
+           familyi={G\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{d55a57c88a14828a53b9e8db48c889d1}
+      \strng{fullhash}{d55a57c88a14828a53b9e8db48c889d1}
+      \strng{bibnamehash}{d55a57c88a14828a53b9e8db48c889d1}
+      \strng{authorbibnamehash}{d55a57c88a14828a53b9e8db48c889d1}
+      \strng{authornamehash}{d55a57c88a14828a53b9e8db48c889d1}
+      \strng{authorfullhash}{d55a57c88a14828a53b9e8db48c889d1}
+      \field{sortinit}{G}
+      \field{sortinithash}{62eb2aa29549e4fdbd3cb154ec5711cb}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{What Every Computer Scientist Should Know About Floating-Point Arithmetic}
+      \field{year}{1991}
+      \verb{urlraw}
+      \verb https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html
+      \endverb
+      \verb{url}
+      \verb https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html
+      \endverb
     \endentry
     \entry{weib}{book}{}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=885b2d05734f83e9cb76ff1e1f7a2137}{%
+        {{hash=885b2d05734f83e9cb76ff1e1f7a2137}{%
            family={Jeffrey\bibnamedelimb R.\bibnamedelimi Russell},
            familyi={J\bibinitperiod\bibinitdelim R\bibinitperiod\bibinitdelim R\bibinitperiod},
            given={Robert\bibnamedelimb F.\bibnamedelimi Engle},
-           giveni={R\bibinitperiod\bibinitdelim F\bibinitperiod\bibinitdelim E\bibinitperiod},
-           givenun=0}}%
+           giveni={R\bibinitperiod\bibinitdelim F\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
       }
       \list{location}{1}{%
         {USA}%
@@ -75,22 +95,72 @@
       \strng{authorfullhash}{885b2d05734f83e9cb76ff1e1f7a2137}
       \field{sortinit}{J}
       \field{sortinithash}{c45040a764d616897e7f5b30174d7b92}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
-      \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Handbook of Financial Econometrics}
       \field{year}{2010}
     \endentry
+    \entry{hawkes2}{thesis}{}
+      \name{author}{1}{}{%
+        {{hash=ee2f4febf7e79524feb843dca7e7ffdc}{%
+           family={Obral},
+           familyi={O\bibinitperiod},
+           given={Katarzyna},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {University of Minnesota}%
+      }
+      \strng{namehash}{ee2f4febf7e79524feb843dca7e7ffdc}
+      \strng{fullhash}{ee2f4febf7e79524feb843dca7e7ffdc}
+      \strng{bibnamehash}{ee2f4febf7e79524feb843dca7e7ffdc}
+      \strng{authorbibnamehash}{ee2f4febf7e79524feb843dca7e7ffdc}
+      \strng{authornamehash}{ee2f4febf7e79524feb843dca7e7ffdc}
+      \strng{authorfullhash}{ee2f4febf7e79524feb843dca7e7ffdc}
+      \field{sortinit}{O}
+      \field{sortinithash}{ff8d4eeb5101e3cf3809959b3592d942}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Simulation, Estimation and Applications of Hawkes Processes}
+      \field{type}{mathesis}
+      \field{year}{2016}
+    \endentry
+    \entry{marcos}{book}{}
+      \name{author}{1}{}{%
+        {{hash=723f4a692f09739ed98959e8b98cf81e}{%
+           family={Prado},
+           familyi={P\bibinitperiod},
+           given={Marcos\bibnamedelima Lopez},
+           giveni={M\bibinitperiod\bibinitdelim L\bibinitperiod},
+           prefix={de},
+           prefixi={d\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {USA, New Jersey}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{723f4a692f09739ed98959e8b98cf81e}
+      \strng{fullhash}{723f4a692f09739ed98959e8b98cf81e}
+      \strng{bibnamehash}{723f4a692f09739ed98959e8b98cf81e}
+      \strng{authorbibnamehash}{723f4a692f09739ed98959e8b98cf81e}
+      \strng{authornamehash}{723f4a692f09739ed98959e8b98cf81e}
+      \strng{authorfullhash}{723f4a692f09739ed98959e8b98cf81e}
+      \field{sortinit}{P}
+      \field{sortinithash}{bb5b15f2db90f7aef79bb9e83defefcb}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Advances in Financial Machine Learning}
+      \field{year}{2018}
+    \endentry
     \entry{prod}{book}{}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=5f3a6090250d5761b07b04acda232be2}{%
+        {{hash=5f3a6090250d5761b07b04acda232be2}{%
            family={Prodromos\bibnamedelimb E.\bibnamedelimi Tsinaslanidis},
            familyi={P\bibinitperiod\bibinitdelim E\bibinitperiod\bibinitdelim T\bibinitperiod},
            given={Achilleas\bibnamedelimb D.\bibnamedelimi Zapranis},
-           giveni={A\bibinitperiod\bibinitdelim D\bibinitperiod\bibinitdelim Z\bibinitperiod},
-           givenun=0}}%
+           giveni={A\bibinitperiod\bibinitdelim D\bibinitperiod\bibinitdelim Z\bibinitperiod}}}%
       }
       \list{location}{1}{%
         {Switzerland}%
@@ -106,17 +176,66 @@
       \strng{authorfullhash}{5f3a6090250d5761b07b04acda232be2}
       \field{sortinit}{P}
       \field{sortinithash}{bb5b15f2db90f7aef79bb9e83defefcb}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
-      \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Technical Analysis for Algorithmic Pattern Recognition}
       \field{year}{2016}
     \endentry
+    \entry{kendall}{online}{}
+      \name{author}{1}{}{%
+        {{hash=263be18e64f3243d6970f2fc8fa83196}{%
+           family={Sarmento},
+           familyi={S\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{263be18e64f3243d6970f2fc8fa83196}
+      \strng{fullhash}{263be18e64f3243d6970f2fc8fa83196}
+      \strng{bibnamehash}{263be18e64f3243d6970f2fc8fa83196}
+      \strng{authorbibnamehash}{263be18e64f3243d6970f2fc8fa83196}
+      \strng{authornamehash}{263be18e64f3243d6970f2fc8fa83196}
+      \strng{authorfullhash}{263be18e64f3243d6970f2fc8fa83196}
+      \field{sortinit}{S}
+      \field{sortinithash}{c319cff79d99c853d775f88277d4e45f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Chapter 22: Correlation Types and When to Use Them}
+      \field{year}{2020}
+      \verb{urlraw}
+      \verb https://ademos.people.uic.edu/Chapter22.html
+      \endverb
+      \verb{url}
+      \verb https://ademos.people.uic.edu/Chapter22.html
+      \endverb
+    \endentry
+    \entry{statista}{online}{}
+      \name{author}{1}{}{%
+        {{hash=62182ca58a739daa8ddd8a48b7b19abb}{%
+           family={Statista},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{62182ca58a739daa8ddd8a48b7b19abb}
+      \strng{fullhash}{62182ca58a739daa8ddd8a48b7b19abb}
+      \strng{bibnamehash}{62182ca58a739daa8ddd8a48b7b19abb}
+      \strng{authorbibnamehash}{62182ca58a739daa8ddd8a48b7b19abb}
+      \strng{authornamehash}{62182ca58a739daa8ddd8a48b7b19abb}
+      \strng{authorfullhash}{62182ca58a739daa8ddd8a48b7b19abb}
+      \field{sortinit}{S}
+      \field{sortinithash}{c319cff79d99c853d775f88277d4e45f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Overall cryptocurrency market capitalization per week from July 2010 to January 2022}
+      \field{year}{2022}
+      \verb{urlraw}
+      \verb https://www.statista.com/statistics/730876/cryptocurrency-maket-value/
+      \endverb
+      \verb{url}
+      \verb https://www.statista.com/statistics/730876/cryptocurrency-maket-value/
+      \endverb
+    \endentry
     \entry{wiki_mt}{online}{}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=9c677286866aad38f8e9b660f5411814}{%
+        {{hash=9c677286866aad38f8e9b660f5411814}{%
            family={Wikipedia},
            familyi={W\bibinitperiod}}}%
       }
@@ -128,9 +247,6 @@
       \strng{authorfullhash}{9c677286866aad38f8e9b660f5411814}
       \field{sortinit}{W}
       \field{sortinithash}{1af34bd8c148ffb32de1494636b49713}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{year}
-      \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{title}{Mt. Gox}

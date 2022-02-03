@@ -8,7 +8,7 @@
 \usepackage{csquotes} 
 \usepackage[T1]{fontenc}
 \usepackage[american]{babel}
-\usepackage[backend=biber, backref = true, style=apa]{biblatex}
+\usepackage[backend=biber, backref = true]{biblatex}
 \usepackage{float}
 \usepackage{fancyhdr}
 \graphicspath{{Images/}}
@@ -16,7 +16,7 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 %\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
-%\fancyhf{}
+%\fancyhf{}1
 %\fancyhead[RE LO]{\chaptermark~\thechapter}
 %\fancyhead[LO]{\leftmark}
 %\fancyfoot[C]{\thepage}
@@ -38,24 +38,15 @@
 \input{Chapters/Titlepage.tex}
 
 
-\chapter*{Abstract}
-\input{Chapters/Misc/Abstract.tex}
-
-
-\chapter*{Dedication}
-To our beautiful families
-
-\chapter*{Declaration}
-I will have a winning strategy 
-
 \chapter*{Acknowledgements}
-Thank you all
+First and foremost, we would like to thank our Professor Greg Cireci, who guided us in doing these projects. He provided us with invaluable advice and helped us in difficult periods. His motivation and help contributed tremendously to the successful completion of the project.
+
+Also, we would like to thank our families for their support. Without that support we couldn’t have succeeded in completing this project.
 
 \tableofcontents
 
 \listoffigures
 
-\listoftables
 
 
 \chapter{Introduction}
@@ -67,9 +58,7 @@ Thank you all
 \chapter{Sampling}
 \input{Chapters/Chapter2/Chapter2.tex}
 
-\appendix
-\chapter*{Appendix}
-\input{Chapters/Appendix/Appendix.tex}
+
 
 \printbibliography
 

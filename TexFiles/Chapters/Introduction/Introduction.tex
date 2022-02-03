@@ -1,10 +1,10 @@
 \section{Problem Statement}
 
-In the past couple of years, a vast inflow of retail and corporate capital has entered the cryptocurrency markets. As time goes by, one may notice a rising interest in these markets, as well as, an almost exponential increase in trading volume. Although the cryptocurrency
-market has many similarities with the traditional, the authors felt that the differences between them, are enough to differentiate their behavior from the traditional assets and thus investigation and research is deemed mandatory.
+In the past couple of years, a vast inflow of retail and corporate capital has entered the cryptocurrency markets. As time goes by, one may notice a rising interest in these markets, as well as, an almost exponential increase in trading volume \cite{statista}. Although the cryptocurrency
+market has many similarities with the traditional ones, the authors felt that the differences between them, are enough to differentiate their behavior from the traditional assets and thus investigation and research is deemed mandatory.
 
 The approach the authors will take in this assignment is to analyze existing ideas and implement them on BTC timeseries, but at the same time, explore new approaches and combinations. The difficulty of this project lies with the asynchronous nature of information.
-The way that information appear in the market must dictate the way they are represented, perceived by the researcher and used by a model. To illustrate this, we will use BTCUSD volume data, from Bitstamp exchange with index ranging from 2020-06-15 to 2020-09-15, aggregated weekly.
+The way that information appears in the market must dictate the way they are represented, perceived by the researcher and used by a model. To illustrate this, we will use BTCUSD volume data, from Bitstamp exchange with index ranging from 2020-06-15 to 2020-09-15, aggregated weekly.
 
 \begin{figure}[h]
 	\centering
@@ -23,8 +23,8 @@ timeframe (from daily), the dataset got shifted by 3 days to the left. As a resu
 that the 2 week period that begins at 2020-07-21 had significant volume, but the highest spike now occurs at the week that starts 2020-09-08.
 
 By changing the resolution to the daily timeframe, we observe that the volume that was attributed to two weeks in the previous graph, actually took place in 5 days, and the biggest spike in volume occurred in 2020-7-25. Further enhancing the resolution and aggregating to the hourly timeframe, the \textit{Hourly} chart,
-shows a different story. There is a cluster of volume occuring at 2020-07-25 and persisting for
-the week to come. More importantly, we observe a second spike around 2020-09-05 that is more pronounced but not as persistent (in terms of lags) as the first one.
+shows a different story. There is a cluster of volume ocurring at 2020-07-25 and persisting for
+the coming week. More importantly, we observe a second spike around 2020-09-05 that is more pronounced but not as persistent (in terms of lags) as the first one.
 
 \begin{figure}[h]
     \centering
@@ -33,14 +33,54 @@ the week to come. More importantly, we observe a second spike around 2020-09-05 
     \label{fig:tick_vol}
 \end{figure}
 
-Lastly, the \ref{fig:tick_vol}, is the highest resolution possible and contains all the information we could possible get for volume in Bitstamp during that period. This chart, looks more like a series of impulses (sudden spikes) while some clusters of volume can be seen on the bottom of the graph. 
+Lastly, graph \ref{fig:tick_vol}, is the highest resolution possible and contains all the information we could possible get for volume in Bitstamp during that period. This chart, looks more like a series of impulses (sudden spikes) while some clusters of volume can be seen on the bottom of the graph. 
 
 What a researcher and an algorithm might extract from the above data, could be different in
 each occasion, nevertheless, it is the same data (except for the 3 days shift that illustrate the danger of sampling in large timeframes), containing the same information. The above example used different fixed timeframe intervals but the same applies to sampling based on the side of the trade, or the number of trades. 
 
 So, why not always use the highest resolution possible, in order to preserve all the information? This question leads us to the next tradeoff: The lower the resolution, the more information is lost, and the higher it is, the more noisy and less useful the data become.
 
-The above example illustrates the main drive of this project: the necessity for proper sampling in high frequency data. This project, will opt to overcome this problem by sampling asynchronously and
-dynamically, on the same dataset and across different features.
+The above example illustrates the main drive of this project: the necessity for proper sampling in high frequency data.
 
 
+\section{Literature Review}
+
+The goal of this literature review is to identify the “avant garde” of researchers in this
+emerging field, to summarize the up-to-date research results regarding data sampling and
+pattern recognition and to pinpoint the most cutting-edge results. The authors will then try to
+place themselves in this large picture and hopefully contribute to technical analysis and data
+sampling family.
+
+The main driver of this project, is Advances in Financial Machine Learning (De Prado
+2018). In his book De Prado gives basic insight on how to sample and prepare data. Specifically,
+he uses the word “information” in a microstructural sense and proposes the creation of bars,
+albeit at an entry level, such as tick imbalance bars, volume/fiat bars and tick run bars. These
+bars could potentially produce signals, that are “triggered” when a certain threshold is
+exceeded, e.g., a certain amount of volume is being traded, at a certain time, that is beyond the
+expected level.
+
+In the third edition of his book Analysis of financial time series (Tsay 2010) chapter 12,
+Gibb’s sampling, which is a Markov Chain Monte Carlo method is used. This method enables
+statistical inference, and has the advantage of “decomposing a high-dimensional estimation” to
+a problem with lower parameter problem. The insight that can be taken from this, is to
+approach Bitcoin signal extraction by removing certain correlated features. An in-detail Python
+application of the MCMC method is illustrated in the Python for Finance (Yves Hilpisch 2015).
+
+An interesting statistical approach on defining and identifying a “Bull or Bear” market
+can be found on the paper: Defining and Dating Bull and Bear Markets: Two Centuries of
+evidence. (Gonzalez, Hoang, Powell, Shi 2006). This paper is not cryptocurrency specific but the
+way it defines these terms is relevant to Bitcoin. The basic tool for identifying the markets being
+used is the persistence of the time-series above or below one or more moving averages
+(Turning point methods BB and CC as they are called by the authors).
+
+Another paper published on 2019 called Exogenous Drivers of Bitcoin and
+Cryptocurrency Volatility – A mixed Sampling Approach to Forecasting (Walther, Klein , Bouri)
+expands on the mixed sampling method (Garch-Midas) regarding volatility of certain
+cryptocurrencies during high price movements. This paper in short concludes that exogenous
+factors are better suited for predicting high volatilities during Bear markets than say the Garch
+model.
+
+Technical Analysis for Algorithmic Pattern Recognition ( Zapranis Tsinaslanidis 2016) is a
+book expanding on technical analysis and will be exceptionally useful because it provides insight
+on patters: holding, support and resistance levels recognition. It expands on indicators and
+tools such as RSI , Bollinger Bands and MA convergence-divergence.

@@ -1,14 +1,14 @@
 
 \section{Introduction}
 
-In this chapter, we will explore the BTCUSD(T) market across 5 major exchanges by following a visual approach on aggregated data. The sampling that is used at this stage is across time, volume and number of trades in a fixed window. Key insights that will be extracted, will serve as the infrastructure of a dynamic way of sampling. 
+In this chapter, we will explore the BTCUSD(T) market across 5 major exchanges by following a visual approach on aggregated data. Our initial sampling approach will be across time (fixed time window). Key insights that will be extracted, will serve as the infrastructure of a dynamic way of sampling. 
 
 
 \section{Volume}
 
-Volume is an important aspect of all financial data. Exploring volume across exchanges is a significant task that will provide our analysis with the insights as to how someone should proceed in using trade-to-trade and aggregated volume in several windows, in order to create meaningful signals.
+It is commonly accepted that volume is one of the most important tools, for analyzing timeseries in finance. Exploring volume across exchanges is a significant task that will provide our analysis with the insights as to how someone should proceed in using trade-to-trade and aggregated volume in several windows, in order to create meaningful signals.
 
-The trade data for BTCUSD begin as early as 2011, with few exchanges offering the opportunity to trade this asset. The first exchange was MtGox. It was launched in 2010 and closed in April 2014 due to fraud, as more than 850,000 BTC were missing \cite{wiki_mt}. As time passed by and BTC gained even more traction, the trade volume upscaled significantly and more exchanges, such as Bitstamp, Kraken and Coinbase, appeared. We will consider 2016 - 2017, as the years that BTC became known enough, to attract the first retail and institutional players.
+The trade data for BTCUSD begin as early as 2011, with few exchanges offering the opportunity to trade this asset. The first exchange was MtGox. It was launched in 2010 and shut down in April 2014 due to fraud, as more than 850,000 BTC were missing \cite{wiki_mt}. As time passed by, and BTC gained more traction, the trading volume upscaled significantly and more exchanges, such as Bitstamp, Kraken and Coinbase, appeared. Following 2017, a demographic shift took place: Institutions and retailers, started engaging with the crypto sphere and Bitcoin specifically in growing numbers \cite{med}. This was the period that Bitcoin become “known”.
 
 \begin{figure}[h]
     \centering
@@ -51,13 +51,17 @@ In the next four graphs \ref{fig:mean}, we can see the mean trading volume in bi
 \end{figure}
 
 
-Furthermore, an evolving market such as the crypto market, attracts retail, institutional and high frequency traders. In order to classify a trade as retail or not, two important assumptions must be met: 
+An approach that may disclose the “nature” of the investor based on the trade data at hand, would be to use the following framework of assumptions: 
 \begin{itemize}
-\item Retail traders are trading in integer dollar volumes, and most likely in multiples of 10, and
-\item Institutional investors will more likely buy and sell in OTC (Over The Counter) markets.
+\item Retail traders are trading in integer dollar volumes, and
+\item Institutional investors will more likely buy in OTC (Over The Counter) markets and sell in spot exchanges using sofisticated execution strategies.
 \end{itemize} 
 
-In order to extract the possible retail trades, we chose a mean transaction cost \( c = 0.022\% \) per trade, and extracted it from all trades. If a trade was divisible by 10, it was classified as a retail trade. Nevertheless, the fee structure is different across exchanges and even different across traders in the same exchange (volume per month dependent). Therefore, we chose to include an error \(e = \$0.15 \) as an acceptable distance from the closer mutliple of 10. The trades chosen, should be trades made manually by some trader and not an algorithm (that tends to trade in many decimals). Furthermore, these trades could be made by a professional of a small magnitude and not a retail trader. For briefness purposes, we will refer to these trades, as retail trades, and the traders that initiated them, as retail traders. The above assumptions are flawed in the sense that someone can buy/sell in bitcoin denominated  values (0.5 btc or 1 btc), therefore, this metric can capture only a small percentage of retail trades. Nevertheless, based on the data that the authors possess, there is no other way to classify a trade as 'retail trade'.
+In order to extract the possible retail trades, an error of \( e = 0.05\$ \) was incorporated in creating two boundary conditions: 
+\[ P - \texttt{int}(P) < e \text{ and },  P - \texttt{int}(P) > -e\] 
+where \( P \) is the price in dollars at which a trade was executed. The role of the error \( e \), is to account for floating rounding errors \cite{app}.   
+
+Furthermore, these trades could be made by a professional of a small magnitude and not a retail trader. For briefness purposes, we will refer to these trades, as retail trades, and the traders that initiated them, as retail traders. The above assumptions are flawed in the sense that someone can buy/sell in bitcoin denominated  values (0.5 btc or 1 btc), therefore, this metric can capture only a small percentage of retail trades. Nevertheless, based on the data that the authors possess, there is no other way to classify a trade as 'retail trade'.
  
 In the figure \ref{fig:ret1}, we can see that the estimated number of retail trades on BTCUSDT, is from 4 to 12 times bigger than the one on BTCUSD. Since a retail trader that wishes to trade for the first time, is forced to use fiat currency, we could assume, that the BTCUSDT trades, were executed from retail traders that were active in previous market cycles as well (2017 bull run and before). 
 
@@ -77,7 +81,7 @@ On the top right graph, we can see the ratio of BTCUSDT to BTCUSD trades. We obs
 
 The increasing ratio indicates that BTCUSDT trades are relatively more precise in following the bull run (experienced retail traders) while the ratio starts declining, close to market top, indicating the timing when retail activity starts to gain traction in BTCUSD market, where is more likely for a 'first time retail trader' to trade.
 
-On the next histograms, the difference in retail activity between BTCUSD and BTCUSDT becomes even more apparent. In the BTCUSD case, the graph is skewed to the left, with few days distributed to the extremes \( > 600,000 \). The BTCUSDT markets though, as indicated from standard deviation which is 3 times greater than the one in BTCUSD, show that the retail activity is distributed more evenly.  A further search on this, should reveal the events that triggered some of the bellow extreme values.  
+On the next histograms, the difference in retail activity between BTCUSD and BTCUSDT becomes even more apparent. In the BTCUSD case, the graph is skewed to the left, with few days distributed to the extremes \( > 600,000 \). The BTCUSDT markets though, as indicated from standard deviation which is 3 times greater than the one in BTCUSD, show that the retail activity is distributed more evenly.
 
 \begin{figure}[H]
 	\centering
@@ -124,7 +128,8 @@ The differences between BTCUSD and BTCUSDT markets, extend to the bitcoin price 
 \end{figure}
 
 
-Such discepancies could be a valuable source of imbalances, that could lead to a more precise sampling. Next, we will explore volume a bit deeper. We will decompose (eigendecomposition) the covariance matrix of volume, of the BTCUSD and BTCUSDT markets. The computation will take place in a rolling fashion under a fixed time interval in order to capture the convergence of volume, between the exchanges in different phases of the market.
+Such discrepancies could be a valuable source of imbalances, that should be useful for a more precise sampling. Next, we will explore volume, a bit deeper. We will decompose the covariance matrix of volume (eigen decomposition), of the BTCUSD
+and BTCUSDT pairs. The computation will take place in a rolling fashion, under a fixed time interval, in order to capture the convergence of volume, between the exchanges and during different phases of the market.
 
 
 \begin{figure}[H]
@@ -135,7 +140,7 @@ Such discepancies could be a valuable source of imbalances, that could lead to a
     \label{fig:covmatrix}
 \end{figure}
 
-In the above figure \ref{fig:covmatrix}, we can see that based on the covariance of the volumes across exchanges, the 1st principal component seems to explain almost all variance most of the time. This finding, enhances the idea that information is quickly transfered and volumes generally converge. The same must be tested for metrics other than covariance. An appropriate such metric, is the first principal component computed from the eigendecomposition of the Kendall correlation matrix. Since the volumes are not normally distributed (figure \ref{fig:kdevol}) , we cannot use neither Pearson or Spearman correlation .
+In the above figure \ref{fig:covmatrix}, we can see that based on the covariance of the volumes across exchanges, the 1st principal component seems to explain almost all variance, most of the time. This finding, enhances the idea that information is quickly transfered and volumes generally converge. The same must be tested for metrics other than covariance. An appropriate such metric, is the first principal component computed from the eigendecomposition of the Kendall correlation matrix. Since the volumes are not normally distributed (figure \ref{fig:kdevol}), we cannot use neither Pearson or Spearman correlation \cite{kendall}.
 
 
 \begin{figure}[H]
@@ -162,7 +167,7 @@ where:
 \item \(G_{x,y} = \sum{t_i(t_i-1)}\) where \(t_i\) is the number of tied values in the \(i\) group of the \(\{x,y\}\) variable
 \end{itemize}
 
-For the next figures, we classified the volume \(V\) into positive volume and negative volume. The computations involved the sign of the returns \(b_t = sign\{p_t - p_{t-1}\}\), where \(p_t\) is the price at time \(t\) (this computation took place on tick data therefore \(t\) is the time measured in number of ticks), multiplied with volume at time \(t-1\) : \(b_t \cdot V_{t-1}\). This computation created an additional two volumes: the positive volume where \(b_t > 0\) and the negative volume where \(b_t < 0\). The rationale behind this, is that negative volume will be responsible for negative returns and positive volume for positive returns. 
+For the following graphs, we need to insert, the notion of positive and negative volumes. The notion of a positive volume (and negative accordingly) is the need to differentiate between the trading volume that leads to positive returns and volume in the market that lead to negative returns. The computations involved the sign of the returns \(b_t = sign\{p_t - p_{t-1}\}\), where \(p_t\) is the price at time \(t\) (this computation took place on tick data therefore \(t\) is the time measured in number of ticks), multiplied with volume at time \(t-1\) : \(b_t \cdot V_{t-1}\). Additionally, by classifying volumes, that inherit a positive or negative sign based on the returns, two sets are formed. 
 
 \begin{figure}[H]
 	\centering
@@ -188,7 +193,7 @@ Next, we visualize the number of trades that take place in each exchange. In the
     \label{fig:nooftrades}
 \end{figure}
 
-In the next figure \ref{fig:nooftrades2}, we are separating the buying from the selling trades. First thing to notice is that our data is corrupted, since for approximately 15 days, all trades are classified as buy-side trades. Due to this shortcoming, in any attempt to use the side of the trade, we will have to exclude this portion of the dataset. Furthermore, the Binance, as expected, processes the largest amount of orders, either buying or selling, but in several spikes, Huobi seems to catch or even suprass Binance. Last but not least, it is interesting that the amount of trades in Coinbase's BTCUSD pair, are steadily increasing, catching up those of the BTCUSDT market.
+In the next figure \ref{fig:nooftrades2}, we are separating the bid, from the offer trades, depending on who initiated each trade(based on  dataset labels buy-sell). First thing to notice is that our data is corrupted, since for approximately 15 days, all trades are classified as trades, initiated by buyers. Due to this shortcoming, in any attempt to use the side of the trade (bid-offer), we will have to exclude this portion of the dataset. Furthermore, the Binance, as expected, processes the largest amount of orders, either buying or selling, but in several spikes, Huobi seems to catch or even suprass Binance. Last but not least, it is interesting that the amount of trades in Coinbase's BTCUSD pair, are steadily increasing, catching up those of the BTCUSDT market.
 
 \begin{figure}[H]
 	\centering
@@ -201,7 +206,7 @@ In the next figure \ref{fig:nooftrades2}, we are separating the buying from the 
 
 The next upper graph \ref{fig:cum}, is produced by taking the cumulative sums of buy side and sell side orders across all exchanges, and subtracting one from the other: 
 \[ \text{cumsum}\{\text{Vol}_{\text{Buying}} - \text{Vol}_{\text{Selling}}\} \]
-Just before the major bullrun of 2020-2021, the sell volume surpassed by far the buy volume, indicative of the uncertainty of that period (Covid19). Around October 2020, the cumulative sell volume peaked, as shown in the minimum of the graph. From then and on, the buy volume was steadily increasing, which coincides with the price action, at the beginning of the 2020-2021 bull run.  
+Just before the major bull run of 2020-2021, the selling volume, by far surpassed the buying volume, indicative of the uncertainty of that period (Covid19). Around October 2020, the cumulative sell volume peaked, as shown in the minimum of the graph. From then and on, the buy volume was steadily increasing, which coincides with the price action, at the beginning of the 2020-2021 bull run.  
 
 The second graph is produced by taking the cumsum of the difference of buy and sell volume, but for each exchange individually. An interesting finding is that coinbase and bitstamp are processing more buy side volume than sell side, and more buy volume than any other exchange. The exact opposite is true for Binance, where sell volume is the highest. That alligns with our prior findings, in that BTCUSD market is the entrance of the 'first time' bitcoin buyer, who is attracted during the bull run. 
 
@@ -215,4 +220,10 @@ The second graph is produced by taking the cumsum of the difference of buy and s
 \end{figure}
 
 
-This disrepancy makes clear that even though each exchange has its own pool of trades, the market dynamics are such, that we need to concern the exchanges not only individually, but as a unified pool of liquidity as well, where one exchange is used mostly from buyers and another one, mostly from sellers. The latter is possible, due to the easy transfering of tokens between exchanges. Especially USDT, XRP, XLM and DOGE amongst others, seem to have enough liquidity, and very low transaction finality time, to be prime candidates for transfering value fast and cheap across exchanges (in contrast to fiat). 
+This discrepancy makes it clear, that even though each exchange has its own pool of
+trades, the market dynamics are such, that one needs to consider each exchange not
+only individually, but as a single identity as well with a unified liquidity pool. It appears from data, that it is possible that a single exchange can at times attract buyers and on the other hand, another one can attract sellers.
+Such a behavior, can be explained by the simplicity of 
+transferring tokens between exchanges (e.g. for arbitrage reasons). Especially USDT, XRP,
+XLM and DOGE amongst others, seem to have viable liquidity, and very low
+transaction finality times and fees. Coins such these, are prime candidates for transferring value fast and cheap.
