@@ -700,3 +700,76 @@ def imbalance_exp2(dataset, alpha, beta, threshold, summary = False):
             state = 3
 
     return out
+
+
+@jit(nopython = True, nogil = True, parallel = True)
+def BSI_hawkess(dataset, kappa, lambda_):
+    n = dataset.shape[0]
+
+    buy = dataset[:,1]
+    sell = dataset[:,0]
+
+
+    BSI_buy = 0
+    BSI_sell = 0
+
+    out = np.zeros((n,2))
+
+    for i in np.arange(n):
+
+        BSI_buy = BSI_buy * np.exp(-kappa) + (buy[i])
+        BSI_sell = BSI_sell * np.exp(-lambda_) + (sell[i])
+        out[i,] = [BSI_buy, BSI_sell]
+
+
+    return(out)
+
+
+@jit(nopython = True, nogil = True)
+def sample_hawkes(dataset, alpha, beta, threshold):
+    n = dataset.shape[0]
+    slow = np.sum(dataset[:alpha])
+    fast = np.sum(dataset[alpha - beta : alpha])
+    count = 1
+    out = np.zeros((n,2))
+    temp = 1
+    state = 1
+
+    for i in np.arange(alpha, n):
+        slow = (slow - dataset[i-alpha] + dataset[i]) / alpha
+        fast = (fast - dataset[i-beta] + dataset[i]) / beta
+
+        if temp != state:
+            out[i,] = [state, dataset[i]]
+            count += 1
+            temp = state
+
+        if fast - slow >= threshold:
+            state = 1
+        elif fast - slow < -threshold:
+            state = 2
+        
+   
+    return out
+
+
+@jit(nopython = True, nogil = True, parallel = True)
+def BSI_hawkess_diff(dataset, kappa):
+    n = dataset.shape[0]
+
+    buy = dataset[:,1]
+    sell = dataset[:,0]
+
+
+    BSI = 0
+
+    out = np.zeros(n)
+
+    for i in np.arange(n):
+
+        BSI = BSI * np.exp(-kappa) + (buy[i] - sell[i])
+        
+        out[i] = BSI
+
+
+    return(out)

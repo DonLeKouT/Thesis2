@@ -11,7 +11,7 @@ In this section, we will use volume along with different features of choice such
 
 The dataset on which the next sampling is performed, is created by classifying the volume into buying and selling volume, depending on who initiated the trade (bid or ask). This classification is taking place directly on tick data. Then, the dataset is aggregated (summation) on the 'second' time interval, where two columns are created: one for the buying volume and one for the selling volume. This procedure is used for all exchanges and as we have shown, all exchanges should be used (see \ref{fig:cum}). 
 
-The latter results to a 10 column dataset where 5 columns are created for the buying volume and 5 columns for the selling volume (one column for each exchange). Lastly, the 5 columns of each side, are summed row-wise in order to create one column for buy and one column for sell. The last columns represent the volume that took place on all exchanges after being classified as buying and selling.
+The latter results to a 10 column dataset where 5 columns are created for the buying volume and 5 columns for the selling volume (two columns for each exchange). Lastly, the 5 columns of each side, are summed row-wise in order to create one column for buy and one column for sell. The last columns represent the volume that took place on all exchanges after being classified as buying and selling.
 
 In order to model the two volumes, we will use a Hawkes process. To provide the reader with a brief explanation of the Hawkes process, we shall begin with a Poisson process, which models the number of occurences at certain time intervals. The key takeaways from Poisson processes are that the expected rate of these occurrences \( \lambda \) is stable (homogeneity) and that the expected rate of occurrences at a future time interval is independent of past occurrences. 
 
@@ -101,7 +101,7 @@ The above calculation results to an array with \(\{1,-1\}\), depending on the si
 represents the imbalance on a non fixed interval of length, \(T\) number of ticks. Then the expectation of the next imbalance \( \mathbb{E}_0(\theta_T) \) is computed using the expectation of the next bars length \( \mathbb{E}_0(T) \) using the next formula:
 \[ \mathbb{E}_0(\theta_T) = \mathbb{E}_0(T) \max\{P[b_t=1]\mathbb{E}_0[v_t|b_t=1], (1-P[b_t=1])\mathbb{E}_0[v_t|b_t=-1]\} \]
 
-The above way of sampling is called \textit{Volume Runs Bars} \cite{marcos}. Basically, we will sample the imbalances of summed signed volumes. A first thought is to sample when these imbalances cross a fixed threshold. This way, we might be able to sample correctly during 'normal' volume, but at times of high (low) volume we will undersample (oversample). 
+The above way of sampling is called \textit{Volume Runs Bars} \cite{marcos}. Basically, we will sample the imbalances of summed signed volumes. A first thought is to sample when these imbalances cross a fixed threshold. This way, we might be able to sample correctly during 'normal' volume, but at times of high (low) volume we will oversample (undersample). 
 
 In order to overcome the fixed threshold problem, we will use a fast exponential moving average (EWMA) and a slow EWMA, which actually serves as a dynamically changing threshold. The sampling will take place, when the fast EWMA crosses the slow EWMA. The EWMA, is a type of moving average, which keeps all past information with decaying weights:
 \[ \text{EWMA}_t = \alpha \cdot x_t + (1 - \alpha) \cdot \text{EWMA}_{t-1} \]
@@ -167,12 +167,12 @@ This market behavior seems unintuitive. The volume that is computed in this samp
 
 We define the 'speed of the market' to be the rate of incoming trades. Since the trades arrive in an asynchronous way, the \texttt{TimeDelta} between two consecutive trades, vary over time. There will be occasions when the \texttt{TimeDelta} contracts and others when it expands. We are interested in those times where it remains contracted for a 'sufficient' number of trades, and as above, the threshold for what is 'sufficient', will dynamically change.
 
-The \texttt{DateTime} column of our dataset, is sampled from milliseconds (1 second = 1,000 milliseconds). After been transformed to \texttt{Unix} time, we are left with an array of 17 digits integers. The high volume - high transaction rates exchanges, (Binance, Coinbase, Huobi) exhibit many transactions that occur at the same millisecond. That could be an indication of high frequency trading, or iceberg orders. 
+The \texttt{DateTime} column of our dataset, is sampled from milliseconds (1 second = 1,000 milliseconds). After been transformed to \texttt{Unix} time, we are left with an array of 11 digits integers. The high volume - high transaction rates exchanges, (Binance, Coinbase, Huobi) exhibit many transactions that occur at the same millisecond. That could be an indication of high frequency trading, or iceberg orders. 
 
 We transform the \texttt{DateTime} array in the following way: at first we compute the first difference in order to calculate the \texttt{TimeDelta}. Then we replace the zeroes (trades that occured the same millisecond) with a number \(z\) such that \( 0 < z < 1 \). The resulting array \texttt{dt}, contains integers as \texttt{TimeDelta} between trades that occured in different time, and a float \(z\), for trades that happened the exact same time. Lastly, we compute \texttt{speed} as:
 \[ \texttt{speed} = \frac{1}{\texttt{dt}} \] 
 
-The resulting array \texttt{speed} contains floats \( < 1 \) everywhere except for the trades that happened the same time, where the values are \( > 1 \). At times, when there are few trades or no trades per (milli) second, the \texttt{speed} takes values, \( < \frac{1}{100000} \). When trades though occur at the same time, the \texttt{speed} spikes become pronounced. In order to sample, we will create the cumulative sums of the \texttt{TimeDelta}. If transaction rates are steady, there will be no sample. Conversely, if they change rapidly, an imbalance will transpire in the form of a spike, and thus, that point will be sampled.
+The resulting array \texttt{speed} contains floats \( < 1 \) everywhere except for the trades that happened the same time, where the values are \( > 1 \). At times, when there are few trades or no trades per (milli) second, the \texttt{speed} takes values, \( < \frac{1}{100000} \). When trades though occur at the same time, the \texttt{speed} spikes become pronounced. In order to sample, we will create the cumulative sums of the \texttt{speed}. If transaction rates are steady, there will be no sample. Conversely, if they change rapidly, an imbalance will transpire in the form of a spike, and thus, that point will be sampled.
 
 By slicing the Coinbase dataset, from \texttt{2020-12-18 00:00:01.086} to \texttt{2021-02-10 23:59:59.700}, we compute the \texttt{TimeDelta} between the two dates in milliseconds: \( 4,751,998,614 \). If the arrival of trades were uniformly distributed, we would expect one trade every approximately \( 295 \) milliseconds.
 
@@ -240,6 +240,3 @@ We repeat the same thing as above but this time on buying and selling volume (se
 \end{figure}
 
 
-\section{Price-Premium Sampling}
-
-\textit{TODO}

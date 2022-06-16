@@ -1,0 +1,313 @@
+\section{Markov’s Chain analysis.}
+
+By using the aforementioned sampling mechanisms, and by proper parametrization according to ones needs, an “umbrella” of strategies for algorithmic trading can be created. One of the approaches, the authors decided to use as a show-case that can “enfold” a future decision making, that may not necessarily be signal extraction, but more of a refining factor, is the use of Markov Chains. In this context one may also use machine learning, statistical analysis etc., but in the context of this capstone, the authors wanted to accompany their sampling methods with an on-hands practical example of how to use the sampling methods that are already shown and then later, to compare the results 
+
+Two scenarios will be presented using aggregated data from all exchanges, dating from 2020-01-01 to 2021-01-31. We shall call these approaches be the “4-hour” (time bars) and the “1.5\%” (price trenching bars), and by using transition probabilities matrices, we will analyze the usefulness and results of different sampling methods (stationarity, significance of results and likely information extraction). 
+
+\subsection{4-hour time bars example.}
+
+Using the simple 4-hour frame window, all that is left to say is the attributes of each window, that form the final combination of states. The authors have selected 4 attributes for each bar:
+
+\begin{itemize}
+\item Volume percentage (positive or negative) of the total volume that moves within each window. Where positive for example, is the volume that is attributed to positive returns (as mentioned already).
+\item Selling and Buying Volume percentage of the total volume that moves withing each window. Where a positive Selling volume for example, is the volume of the trades that was initiated by a seller (Offer trade) and the buying volume percentage corresponds to bidding volume within this window.
+\item Absolute number of bid and ask orders.
+\item Price rises above 1.5\% (up state), falls below 1.5\% (down state) or stays withing a -1.5\% to 1.5\% interval (no move state).
+\end{itemize}
+
+The combination of all these attributes totals 24 different states. For a proper read of the following matrices, let’s suppose we have the following state: O1-U2-U3-down. That should sequentially be read as follows: 
+
+\begin{itemize}
+\item the volume that is attributed to negative returns is higher than the volume that is attributed to positive returns (Over).
+\item The volume that is attributed to bidding orders is higher than the volume that is attributed to offer orders (meaning sell initiated orders are under).
+\item The absolute (net amount) of bidding offers is higher (percentage wise) than the absolute number of asking orders.
+\item The price during this time window has fallen more than 1.5\%, compared to the previous 4h period.
+\end{itemize}
+
+Since there is a total of 24 states, the probabilities transition matrix size, is 24 by 24. Aggregating appropriately the columns of the 24x24 transition matrix, the probabilities that each state transitions, are obtained \ref{Tab: four_h_markov}
+
+
+
+\begin{table}[H]
+\caption{Transition Matrix for 4-hour timeframe}
+\centering
+\begin{tabular}{lrrr}
+\toprule
+{} &        up &     nomov &      down \\
+\midrule
+U1-O2-U3-nomov &  0.128852 &  0.733894 &  0.137255 \\
+O1-U2-U3-nomov &  0.138182 &  0.745455 &  0.116364 \\
+U1-O2-O3-nomov &  0.116279 &  0.754153 &  0.129568 \\
+U1-U2-U3-nomov &  0.106870 &  0.748092 &  0.145038 \\
+U1-O2-O3-down  &  0.259109 &  0.404858 &  0.336032 \\
+O1-U2-U3-up    &  0.283544 &  0.445570 &  0.270886 \\
+U1-O2-U3-down  &  0.333333 &  0.289617 &  0.377049 \\
+U1-U2-U3-up    &  0.428571 &  0.285714 &  0.285714 \\
+O1-U2-O3-nomov &  0.196078 &  0.686275 &  0.107843 \\
+O1-O2-U3-nomov &  0.226667 &  0.706667 &  0.066667 \\
+O1-U2-U3-down  &  0.406250 &  0.296875 &  0.296875 \\
+U1-O2-U3-up    &  0.400000 &  0.200000 &  0.400000 \\
+U1-U2-U3-down  &  0.323529 &  0.264706 &  0.411765 \\
+U1-U2-O3-nomov &  0.090909 &  0.818182 &  0.090909 \\
+O1-U2-O3-up    &  0.400000 &  0.355556 &  0.244444 \\
+O1-U2-O3-down  &  0.500000 &  0.375000 &  0.125000 \\
+U1-O2-O3-up    &  0.451613 &  0.322581 &  0.225806 \\
+O1-O2-O3-down  &  0.250000 &  0.125000 &  \textbf{0.625000} \\
+U1-U2-O3-down  &  0.000000 &  0.250000 &  \textbf{0.750000} \\
+O1-O2-O3-up    &  0.166667 &  0.833333 &  0.000000 \\
+O1-O2-O3-nomov &  0.149254 &  0.731343 &  0.119403 \\
+O1-O2-U3-down  &  0.000000 &  0.200000 &  \textbf{0.800000} \\
+O1-O2-U3-up    &  0.111111 &  0.555556 &  0.333333 \\
+U1-U2-O3-up    &  0.000000 &  0.333333 &  \textbf{0.666667} \\
+\bottomrule
+\end{tabular}
+\label{Tab: four_h_markov}
+\end{table}
+
+
+
+
+Initially, we found the noted results interesting, considering that at least 4 of our states deviated with high a probability, from the current state to either up (in one occasion) or to a down state (in four occasions) and that may be exploitable when forming a strategy, by either longing or shorting when these 5 states are observed.
+
+A discouraging factor though, may be the fact that, the number (counts) of events at which states O1-O2-O3-down U1-U2-O3-down, O1-O2-U3-down and U1-U2-O3-up is not significant enough. The total number of 4h windows is about 2723. The corresponding counts number for each event specifically is following, \ref{Tab: four_h_count}
+
+\begin{table}[H]
+\caption{Number of occurences of all states.}
+\centering
+\begin{tabular}{lr}
+\toprule
+{} &  No of Occurences of states \\
+state          &        \\
+\midrule
+O1-O2-O3-down  &      8 \\
+O1-O2-O3-nomov &     67 \\
+O1-O2-O3-up    &      6 \\
+O1-O2-U3-down  &      5 \\
+O1-O2-U3-nomov &     75 \\
+O1-O2-U3-up    &      9 \\
+O1-U2-O3-down  &      8 \\
+O1-U2-O3-nomov &    102 \\
+O1-U2-O3-up    &     45 \\
+O1-U2-U3-down  &     64 \\
+O1-U2-U3-nomov &    550 \\
+O1-U2-U3-up    &    395 \\
+U1-O2-O3-down  &    247 \\
+U1-O2-O3-nomov &    301 \\
+U1-O2-O3-up    &     31 \\
+U1-O2-U3-down  &    183 \\
+U1-O2-U3-nomov &    357 \\
+U1-O2-U3-up    &     55 \\
+U1-U2-O3-down  &      4 \\
+U1-U2-O3-nomov &     22 \\
+U1-U2-O3-up    &      3 \\
+U1-U2-U3-down  &     34 \\
+U1-U2-U3-nomov &    131 \\
+U1-U2-U3-up    &     21 \\
+\bottomrule
+\end{tabular}
+\label{Tab: four_h_count}
+\end{table}
+
+
+What we see here is a different story. On one hand the U1-U2-O3-up event is very rare, (only a three-time occurrence during period of 15 months. This event should be read as: The negative volume (negative returns) is lower than the positive volume, the volume attributed to sellers is lower than the volume attributed to bidding orders, the number of ask orders is higher than the number of bid orders. 
+
+On the other hand, two out of these times, the price rose in the next 4h window.  Perhaps more data, would be of help, but during different market periods, market behavior should be different and we decided to avoid using more data and concluded that as is, these results are insignificant.
+
+Finally, the authors decided to find if this distribution is stationary and we raise the P2 matrix to the fifth power. We saw that there is a convergence and thus the initial matrix was irreducible and aperiodic, (see table \ref{Tab: four_h_power}). 
+
+\begin{table}[H]
+\caption{Transition matrix raised to the 5th power.}
+\centering
+\begin{tabular}{lrrr}
+\toprule
+{} &        up &     nomov &      down \\
+\midrule
+U1-O2-U3-nomov &  0.217935 &  0.573440 &  0.207045 \\
+O1-U2-U3-nomov &  0.217828 &  0.573832 &  0.206884 \\
+U1-O2-O3-nomov &  0.217606 &  0.574095 &  0.206560 \\
+U1-U2-U3-nomov &  0.217897 &  0.573766 &  0.206978 \\
+U1-O2-O3-down  &  0.221230 &  0.565667 &  0.211738 \\
+O1-U2-U3-up    &  0.220999 &  0.566309 &  0.211401 \\
+U1-O2-U3-down  &  0.222770 &  0.562074 &  0.213956 \\
+U1-U2-U3-up    &  0.223114 &  0.560972 &  0.214423 \\
+O1-U2-O3-nomov &  0.215751 &  0.567556 &  0.204943 \\
+O1-O2-U3-nomov &  0.217852 &  0.573553 &  0.206929 \\
+O1-U2-U3-down  &  0.222460 &  0.562900 &  0.213452 \\
+U1-O2-U3-up    &  0.223882 &  0.559433 &  0.215531 \\
+U1-U2-U3-down  &  0.223524 &  0.560602 &  0.214964 \\
+U1-U2-O3-nomov &  0.216873 &  0.574947 &  0.205580 \\
+O1-U2-O3-up    &  0.221231 &  0.565297 &  0.211754 \\
+O1-U2-O3-down  &  0.221690 &  0.564895 &  0.212348 \\
+U1-O2-O3-up    &  0.221574 &  0.565166 &  0.212198 \\
+O1-O2-O3-down  &  0.223126 &  0.561490 &  0.214395 \\
+U1-U2-O3-down  &  0.223486 &  0.560715 &  0.214859 \\
+O1-O2-O3-up    &  0.217181 &  0.575767 &  0.205976 \\
+O1-O2-O3-nomov &  0.217702 &  0.573677 &  0.206705 \\
+O1-O2-U3-down  &  0.223896 &  0.559777 &  0.215431 \\
+O1-O2-U3-up    &  0.219532 &  0.570132 &  0.209260 \\
+U1-U2-O3-up    &  0.221568 &  0.565435 &  0.212098 \\
+\bottomrule
+\end{tabular}
+\label{Tab: four_h_power}
+\end{table}
+
+This matrix informs the reader that the expected rates, of ending up to either an up window, a no-move window or a down window, independently of which state we start from, converges to:
+
+\begin{itemize}
+\item 21.9\% for and up move
+\item 57\% for a no move 
+\item 21.1\% for a down move
+\end{itemize}
+
+A slight edge for positive returns for BTC during this period. But marginally. Considering that the no-move window may contain more upwards movements than downwards movements (inside the -1.5\% +1.5\% interval) , with our next method we decided to drop the no move factor. As, we see, simple 4h analysis, without proper information bars is of little help.
+
+
+\subsection{1.5\% Price Barrier Bars example.}
+
+As the name implies, the threshold of the price bars, is 1.5\% and the code allows us to set this number at different levels. So,Each bar is formed, whenever a 1.5\% alteration of the price occurs. We used this percentage because it was high enough to form a strategy in the future, (a strategy that would, if successful, be able to pay trading fees), but also not too high as to not detect a significant number of events. The reader should know that, in any case, there will be intervals/bars at which the price could fall to -1\% and then rise to 1\% and thus not even registering as a valid bar, although the difference should be about 2\%. But this is out of the scope of this probabilistic analysis, which aims to crudely compare the two approaches and as mentioned is not necessarily a signal extraction method. 
+
+We decided our transition matrix (1.5\% price sampling) to be constituted by a combination of the following four states:
+
+\begin{itemize}
+\item Volume percentage (positive or negative) of the total volume that moves within each window. Where positive for example, is the volume that is attributed to positive returns (as mentioned already).
+\item Selling and Buying Volume percentage of the total volume that moves withing each window. Where a positive Selling volume for example, is the volume of the trades that was initiated by a seller (Offer trade) and the buying volume percentage corresponds to bidding volume within this window.
+\item Absolute number of bid and ask orders.
+\item Price rises (up), price falls (down).
+\end{itemize}
+
+The transition matrix (a 16 by 16 matrix), was reduced to the following table. \ref{Tab: price_markov}
+
+\begin{table}[H]
+\caption{Transition matrix (reduced) for price barrier sampling.}
+\centering
+\begin{tabular}{lrr}
+\toprule
+{} &        up &      down \\
+\midrule
+U1-O2-U3-down &  0.522059 &  0.477941 \\
+U1-O2-O3-down &  0.533962 &  0.466038 \\
+U1-U2-U3-up   &  \textbf{0.562130} &  0.437870 \\
+O1-U2-U3-up   &  0.526276 &  0.472973 \\
+O1-U2-U3-down &  0.538922 &  0.461078 \\
+U1-O2-U3-up   &  0.513369 &  0.486631 \\
+O1-O2-O3-up   &  0.500000 &  0.500000 \\
+U1-U2-U3-down &  0.535714 &  0.464286 \\
+O1-O2-U3-up   &  0.475000 &  0.525000 \\
+O1-U2-O3-up   &  0.495868 &  0.504132 \\
+U1-U2-O3-up   &  0.450000 &  \textbf{0.550000} \\
+O1-O2-U3-down &  \textbf{0.666667} &  0.333333 \\
+U1-O2-O3-up   &  0.491124 &  0.508876 \\
+U1-U2-O3-down &  0.450000 &  \textbf{0.550000} \\
+O1-O2-O3-down &  \textbf{0.588235} &  0.411765 \\
+O1-U2-O3-down &  0.446809 &  \textbf{0.553191} \\
+\bottomrule
+\end{tabular}
+\label{Tab: price_markov}
+\end{table}
+
+
+The total amount of events under this sampling, is 3943, which is larger than the amount of events generated by the previous 4h approach. We have calculated the average time of these events occurrence to be about 2 hours and 47 minutes. The transition matrix, table \ref{Tab: price_markov_2}, shows there is a small number of events with probabilities above 55\%, for a transition to either direction. These numbers are more significant for two reasons. We know that the next bar will be different by 1.5\% and the number of counts is not as trivial as it was in the previous example:
+
+
+\begin{table}[H]
+\caption{Number of occurences of states}
+\centering
+\begin{tabular}{lr}
+\toprule
+{} &  Number of occurences \\
+state         &        \\
+\midrule
+O1-O2-O3-down &     51 \\
+O1-O2-O3-up   &     38 \\
+O1-O2-U3-down &     30 \\
+O1-O2-U3-up   &     40 \\
+O1-U2-O3-down &     47 \\
+O1-U2-O3-up   &    121 \\
+O1-U2-U3-down &    167 \\
+O1-U2-U3-up   &   1332 \\
+U1-O2-O3-down &   1060 \\
+U1-O2-O3-up   &    169 \\
+U1-O2-U3-down &    408 \\
+U1-O2-U3-up   &    187 \\
+U1-U2-O3-down &     20 \\
+U1-U2-O3-up   &     20 \\
+U1-U2-U3-down &     84 \\
+U1-U2-U3-up   &    169 \\
+\bottomrule
+\end{tabular}
+\label{Tab: price_markov_2}
+\end{table}
+
+
+The transition matrix, is again stationary and converges (see \ref{Tab: price_markov_3}):
+
+
+\begin{table}[H]
+\caption{Transition matrix raised to 3rd power}
+\centering
+\begin{tabular}{lrr}
+\toprule
+{} &        up &      down \\
+\midrule
+U1-O2-U3-down &  0.526634 &  0.472913 \\
+U1-O2-O3-down &  0.526228 &  0.473361 \\
+U1-U2-U3-up   &  0.526789 &  0.472620 \\
+O1-U2-U3-up   &  0.526128 &  0.472527 \\
+O1-U2-U3-down &  0.526623 &  0.472905 \\
+U1-O2-U3-up   &  0.526530 &  0.472904 \\
+O1-O2-O3-up   &  0.526142 &  0.473332 \\
+U1-U2-U3-down &  0.526716 &  0.472763 \\
+O1-O2-U3-up   &  0.525709 &  0.473813 \\
+O1-U2-O3-up   &  0.525432 &  0.474062 \\
+U1-U2-O3-up   &  0.525297 &  0.474237 \\
+O1-O2-U3-down &  0.526652 &  0.472828 \\
+U1-O2-O3-up   &  0.525639 &  0.473879 \\
+U1-U2-O3-down &  0.526427 &  0.473191 \\
+O1-O2-O3-down &  0.526458 &  0.473086 \\
+O1-U2-O3-down &  0.525187 &  0.474336 \\
+\bottomrule
+\end{tabular}
+\label{Tab: price_markov_3}
+\end{table}
+
+There is a 52.7\% of a positive trend, no matter the initial state. And this result is perhaps an indicator of a bull run period and is more conclusive.
+
+\section{Conclusions}
+
+The example above, is only one of many, whose efficacy could be tested using Markov's chain. The sampling methods presented in the previous chapter, can also offer additional strategies on the same dataset. In the code provided, two more Markov's chains are constructed on different sampling methods (volume run bars and volume modelled with Hawkes process) with comparable (to the above) results.
+
+Regarding the trade-off presented in the first chapter, by sampling when an imbalance occurs, one can compress the dataset in a more meaningful way than timebars. The authors though, faced a different trade-off when dynamic sampling was used, as each sampling method can capture just a percentage of information present at the market: each sampling algorithm results in samples with different index (time in milliseconds), and a researcher must choose how these samples will be grouped in order to create a signal process. This becomes increasingly difficult at times of large volume, when sampling algorithms tend to sample more frequently.
+
+Except for the Markov's chains, additional ML algorithms could be used in order to extract signals out of each sampling method. The reader should note, that not all samples mean something, and it is suggested \cite{marcos}, that the meaningful samples should be labeled before being used with an algorithm as signals. Furthermore, the sampling occured on raw dataset (most of the time) but it could be also used, on a transformed dataset (for example treating the 'millisecond' trades as one trade, compressing significantly the dataset) with varying results as to which points are picked as samples.
+
+The sampling that could result in signal creation the easiest, is the Hawkes process and the four states presented in chapter 3.2. Given the appropriate parameters, one can correctly model the beginning and the end of a price movement by simply modeling the difference in the buying and selling volume.
+
+Concerning the exploration of the dataset, the information provided in the second chapter, was just a glimpse of what is hidden, and BTCUSD(T) analysis alone, could have been, the core of this project. As new graphs and sampling methods were tested, new questions also emerged, and most of them remain unanswered. It is apparent that more data is needed in order to explain what the authors believe to be a cryptic behavior.
+
+\subsection{Self-assessment}
+
+After almost two years into this journey, we would like to thank the WQU organization for this wonderful chance and all the accompanying experiences. Finally, there had to be a self-assessment segment, with regard to our efforts, expectations and results pertaining to this project.
+
+At first, there is an overwhelming number of plots and while we tried to be as rigorous as possible when needed, given self-imposed restrictions, decisions and planning, certain assumptions should be made and thus, this project lacks detail and depth in certain cases. There has also been a significant number of ideas that remained either unexplored, or were given less light than they deserved. Furthermore, there were times, where bias may have been unwillingly introduced. 
+
+The next problem the authors faced, was that of parameter selection of the sampling algorithms, such as M.A and window size amongst others. In order to estimate the efficacy of the parameters, a loss function should be taken into account, which means that an objective purpose before sampling should be introduced. Nevertheless, an objective was purposely not included, and parameters were chosen in a way that most information was retained according to the author's experiences (both are traders, especially Tilemachos Kosmetsas).
+
+The above stance, reflects the struggle to get the grasp on high frequency data for the first time (the authors had no exposure on high frequency data before), and the belief that choosing parameters is somewhat of an art form, necessitates decision making, and sometimes maybe leaps of faith. Our target remains, to one day create a trading bot, that is more sophisticated than what the average retailer can accomplish.
+
+The authors believe that the project was a relative 'success', in forming an all-around simple structured notion on asynchronous sampling. Unfortunately, there is not much information available online on this subject and thus, many ideas presented along with the code, are entirely a product of personal work.
+The code can be found \href{https://github.com/DonLeKouT/Thesis2}{here}.
+
+
+\subsection{Future endeavors}
+
+
+For the researcher who wishes to undertake future endeavors in continuation to this project, the following subjects are proposed:
+\begin{itemize}
+\item Invent a grading system for each trade in order to classify a trade based on its importance, and then model the arrival rate of important trades.
+\item Use a signal decomposition approach, to analyze high frequency data.
+\item Incorporate the spreads when sampling.
+\item Sample from the perpetual futures market using the mark price and the funding rate.
+\item Construct a dynamic Bollinger Band method where the upper and lower bounds, are dependent on the sampling techniques, presented in this project.
+\item Ensemble use case. Create an mechanism, for each sampling method, such that each one outputs a signal and then feed this signal to a supervised learning machine learning algorithm that outputs a final trade signal ( either long, short , or abstain).
+\end{itemize}
+ 
